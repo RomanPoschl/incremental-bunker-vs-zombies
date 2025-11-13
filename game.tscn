@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://iqdopbd1b6kg"]
+[gd_scene load_steps=14 format=3 uid="uid://iqdopbd1b6kg"]
 
 [ext_resource type="Script" uid="uid://c56fpyntobonv" path="res://visual_managers/worker_manager.gd" id="1_ryrav"]
 [ext_resource type="SpriteFrames" uid="uid://dv6dyuhhw3673" path="res://art/worker_animations.tres" id="2_e2o6t"]
@@ -8,6 +8,10 @@
 [ext_resource type="PackedScene" uid="uid://bcbf8c1oh4s46" path="res://zombie.tscn" id="5_ryrav"]
 [ext_resource type="Script" uid="uid://bphy5j8c74e5o" path="res://visual_managers/turret_manager.gd" id="6_eow3j"]
 [ext_resource type="PackedScene" uid="uid://ds7fartreeuwy" path="res://turret.tscn" id="7_j5wjh"]
+[ext_resource type="Script" uid="uid://c4vbcpk1dk02u" path="res://visual_managers/structure_manager.gd" id="8_vef74"]
+[ext_resource type="PackedScene" uid="uid://ck2oxj3cknfuu" path="res://factory.tscn" id="9_iotsf"]
+[ext_resource type="PackedScene" uid="uid://cmicogg5k3hgd" path="res://elevator.tscn" id="10_lc2xo"]
+[ext_resource type="PackedScene" uid="uid://cdqhttnb60hc3" path="res://desk.tscn" id="11_215e1"]
 
 [sub_resource type="Environment" id="Environment_7jktm"]
 background_mode = 1
@@ -28,6 +32,12 @@ enemy_scene = ExtResource("5_ryrav")
 [node name="TurretManager" type="Node" parent="VisualManagers"]
 script = ExtResource("6_eow3j")
 turret_scene = ExtResource("7_j5wjh")
+
+[node name="StructureManager" type="Node" parent="VisualManagers"]
+script = ExtResource("8_vef74")
+factory_texture = ExtResource("9_iotsf")
+elevator_texture = ExtResource("10_lc2xo")
+desk_texture = ExtResource("11_215e1")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(581, 319)

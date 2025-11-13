@@ -4,6 +4,7 @@
 [ext_resource type="SpriteFrames" uid="uid://dv6dyuhhw3673" path="res://art/worker_animations.tres" id="1_26yh5"]
 
 [node name="Worker" type="Node2D"]
+z_index = 1
 script = ExtResource("1_8vnpx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

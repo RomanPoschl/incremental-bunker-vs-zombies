@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://cmicogg5k3hgd"]
+
+[ext_resource type="Script" uid="uid://xd8ykf8jx48m" path="res://elevator.gd" id="1_uuuf0"]
+[ext_resource type="Texture2D" uid="uid://dn8knte6wrsjn" path="res://icon.svg" id="2_pc862"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pc862"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_pc862")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Elevator" type="Node2D"]
+script = ExtResource("1_uuuf0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_pc862")

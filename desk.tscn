@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://cdqhttnb60hc3"]
+
+[ext_resource type="Script" uid="uid://bk85qugyknkut" path="res://desk.gd" id="1_ep8l3"]
+[ext_resource type="Texture2D" uid="uid://dn8knte6wrsjn" path="res://icon.svg" id="2_t5y75"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_t5y75"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_t5y75")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Desk" type="Node2D"]
+script = ExtResource("1_ep8l3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_t5y75")

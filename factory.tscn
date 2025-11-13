@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://ck2oxj3cknfuu"]
+
+[ext_resource type="Script" uid="uid://duv4xcatj8utk" path="res://factory.gd" id="1_oq3xt"]
+[ext_resource type="Texture2D" uid="uid://dn8knte6wrsjn" path="res://icon.svg" id="2_xaprj"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fjy48"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_xaprj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Factory" type="Node2D"]
+script = ExtResource("1_oq3xt")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_fjy48")
