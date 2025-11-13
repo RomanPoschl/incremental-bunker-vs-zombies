@@ -1,0 +1,9 @@
+{
+	"auto_indent": true,
+	"indent_guides": {
+		"enabled": true
+	},
+	"format_on_save": "on",
+	"hard_tabs": false,
+	"tab_size": 4
+}

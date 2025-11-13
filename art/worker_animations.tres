@@ -1,0 +1,23 @@
+[gd_resource type="SpriteFrames" load_steps=3 format=3 uid="uid://dv6dyuhhw3673"]
+
+[ext_resource type="Texture2D" uid="uid://bhj0fdbgeqdhq" path="res://art/worker_idle.tres" id="1_jlcp6"]
+[ext_resource type="Texture2D" uid="uid://d3ig77wqlyxvp" path="res://art/worker_walk.tres" id="2_6wtf6"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_jlcp6")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_6wtf6")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]

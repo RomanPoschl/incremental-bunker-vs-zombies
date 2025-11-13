@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://iqdopbd1b6kg"]
+
+[ext_resource type="Script" uid="uid://c56fpyntobonv" path="res://worker_manager.gd" id="1_ryrav"]
+[ext_resource type="SpriteFrames" uid="uid://dv6dyuhhw3673" path="res://art/worker_animations.tres" id="2_e2o6t"]
+[ext_resource type="PackedScene" uid="uid://chirbx5nkw5cq" path="res://worker.tscn" id="2_feb5d"]
+
+[sub_resource type="Environment" id="Environment_7jktm"]
+background_mode = 1
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ryrav"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[node name="Game" type="Node2D"]
+
+[node name="WorkerManager" type="Node" parent="."]
+script = ExtResource("1_ryrav")
+worker_scene = ExtResource("2_feb5d")
+worker_sprite_frames = ExtResource("2_e2o6t")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(581, 319)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7jktm")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ryrav")
+animation = &"idle"

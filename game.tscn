@@ -1,0 +1,43 @@
+[gd_scene load_steps=10 format=3 uid="uid://iqdopbd1b6kg"]
+
+[ext_resource type="Script" uid="uid://c56fpyntobonv" path="res://visual_managers/worker_manager.gd" id="1_ryrav"]
+[ext_resource type="SpriteFrames" uid="uid://dv6dyuhhw3673" path="res://art/worker_animations.tres" id="2_e2o6t"]
+[ext_resource type="PackedScene" uid="uid://chirbx5nkw5cq" path="res://worker.tscn" id="2_feb5d"]
+[ext_resource type="Script" uid="uid://dy20dycpyunda" path="res://visual_managers/enemy_manager.gd" id="4_7jktm"]
+[ext_resource type="Script" uid="uid://dvuf65q1vtsoc" path="res://game_ui.gd" id="4_fc0e3"]
+[ext_resource type="PackedScene" uid="uid://bcbf8c1oh4s46" path="res://zombie.tscn" id="5_ryrav"]
+[ext_resource type="Script" uid="uid://bphy5j8c74e5o" path="res://visual_managers/turret_manager.gd" id="6_eow3j"]
+[ext_resource type="PackedScene" uid="uid://ds7fartreeuwy" path="res://turret.tscn" id="7_j5wjh"]
+
+[sub_resource type="Environment" id="Environment_7jktm"]
+background_mode = 1
+
+[node name="Game" type="Node2D"]
+
+[node name="VisualManagers" type="Node" parent="."]
+
+[node name="WorkerManager" type="Node" parent="VisualManagers"]
+script = ExtResource("1_ryrav")
+worker_scene = ExtResource("2_feb5d")
+worker_sprite_frames = ExtResource("2_e2o6t")
+
+[node name="EnemyManager" type="Node" parent="VisualManagers"]
+script = ExtResource("4_7jktm")
+enemy_scene = ExtResource("5_ryrav")
+
+[node name="TurretManager" type="Node" parent="VisualManagers"]
+script = ExtResource("6_eow3j")
+turret_scene = ExtResource("7_j5wjh")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(581, 319)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7jktm")
+
+[node name="GameUI" type="CanvasLayer" parent="."]
+script = ExtResource("4_fc0e3")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameUI"]
+offset_right = 40.0
+offset_bottom = 40.0
