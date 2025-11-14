@@ -22,6 +22,8 @@ var navigation_system: NavigationSystem
 var worker_action_system: WorkerActionSystem
 var cleanup_system: CleanupSystem
 var turret_system: TurretSystem
+var enemy_movement_system: EnemyMovementSystem
+var enemy_spawner_system: EnemySpawnerSystem
 
 func _ready() -> void:
     production_system = ProductionSystem.new()
@@ -30,9 +32,18 @@ func _ready() -> void:
     worker_action_system = WorkerActionSystem.new()
     cleanup_system = CleanupSystem.new()
     turret_system = TurretSystem.new()
+    enemy_movement_system = EnemyMovementSystem.new()
+    enemy_spawner_system = EnemySpawnerSystem.new()
+    
+    var desk_id: int = create_entity()
+    var desk_pos = PositionComponent.new(Vector2(100, 300))
+    var desk_level = LevelComponent.new(1)
+    add_component(desk_id, DeskComponent.new())
+    add_component(desk_id, desk_pos)
+    add_component(desk_id, desk_level)
+    print("Spawned Desk (ID: %s)" % desk_id)
 
     var elevator_id: int = create_entity()
-
     var elev_pos = PositionComponent.new(Vector2(500, 300))
     var elev_level = LevelComponent.new(-1)
     add_component(elevator_id, ElevatorComponent.new())
@@ -41,7 +52,7 @@ func _ready() -> void:
     print("Spawned Elevator (ID: %s)" % elevator_id)
 
     var factory_id: int = create_entity()
-    var prod_comp = ProductionComponent.new("basic_bullet", 10, 1, 50, 200)
+    var prod_comp = ProductionComponent.new("basic_bullet", .25, 1, 50, 200)
     var fact_pos = PositionComponent.new(Vector2(300, 300))
     var fact_level = LevelComponent.new(-1)
     add_component(factory_id, prod_comp)
@@ -50,7 +61,7 @@ func _ready() -> void:
     print("Spawned Factory (ID: %s)" % factory_id)
 
     var worker_id: int = create_entity()
-    var worker_comp = WorkerComponent.new(75.0, 3)
+    var worker_comp = WorkerComponent.new(desk_id, 75.0, 3)
     var fsm_comp = WorkerFSMComponent.new(WorkerFSMComponent.WorkerState.IDLE)
     var worker_pos = PositionComponent.new(Vector2(300, 300))
     var worker_level = LevelComponent.new(-1)
@@ -74,30 +85,6 @@ func _ready() -> void:
     add_component(turret_id, LevelComponent.new(1))
     print("Spawned Turret (ID: %s)" % turret_id)
 
-    var zombie_id = create_entity()
-    var z_comp = EnemyComponent.new()
-    z_comp.max_hp = 50
-    z_comp.current_hp = 50
-
-    var z_pos = PositionComponent.new(Vector2(325, 100))
-
-    add_component(zombie_id, z_comp)
-    add_component(zombie_id, z_pos)
-    add_component(zombie_id, LevelComponent.new(1))
-    print("Spawned Zombie (ID: %s)" % zombie_id)
-
-    var zombie_id2 = create_entity()
-    var z_comp2 = EnemyComponent.new()
-    z_comp2.max_hp = 50
-    z_comp2.current_hp = 50
-
-    var z_pos2 = PositionComponent.new(Vector2(275, 100))
-
-    add_component(zombie_id2, z_comp2)
-    add_component(zombie_id2, z_pos2)
-    add_component(zombie_id2, LevelComponent.new(1))
-    print("Spawned Zombie (ID: %s)" % zombie_id2)
-
 func _process(delta: float) -> void:
     if production_system:
         production_system.update(delta)
@@ -110,6 +97,12 @@ func _process(delta: float) -> void:
 
     if worker_action_system:
         worker_action_system.update(delta)
+
+    if enemy_movement_system:
+        enemy_movement_system.update(delta)
+        
+    if enemy_spawner_system:
+        enemy_spawner_system.update(delta)
 
     if turret_system:
         turret_system.update(delta)

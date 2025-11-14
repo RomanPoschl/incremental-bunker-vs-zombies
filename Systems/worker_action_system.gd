@@ -33,14 +33,14 @@ func _handle_pickup(worker_id: int, fsm: WorkerFSMComponent):
     var factory_id: int = fsm.target_entity_id
 
     if not productions.has(factory_id) or not workers.has(worker_id):
-        # _send_worker_to_desk(worker_id, fsm) # Use helper
+        _send_worker_to_desk(worker_id, fsm) # Use helper
         return
 
     var prod: ProductionComponent = productions[factory_id]
     var worker: WorkerComponent = workers[worker_id]
 
     if prod.internal_inventory <= 0:
-        # _send_worker_to_desk(worker_id, fsm) # Use helper
+        _send_worker_to_desk(worker_id, fsm) # Use helper
         return
 
     var inventory: InventoryComponent
@@ -70,19 +70,19 @@ func _handle_pickup(worker_id: int, fsm: WorkerFSMComponent):
 
 func _handle_dropoff(worker_id: int, fsm: WorkerFSMComponent):
     if not inventories.has(worker_id):
-        # _send_worker_to_desk(worker_id, fsm)
+        _send_worker_to_desk(worker_id, fsm)
         return
 
     var inventory: InventoryComponent = inventories[worker_id]
     if inventory.stacks.is_empty():
-        # _send_worker_to_desk(worker_id, fsm)
+        _send_worker_to_desk(worker_id, fsm)
         return
 
     for stack: StackComponent in inventory.stacks:
         EcsWorld.deposit_ammo(stack.ammo_type, stack.amount)
 
     inventory.stacks.clear()
-    fsm.current_state = WorkerFSMComponent.WorkerState.IDLE
+    _send_worker_to_desk(worker_id, fsm)
 
 func _find_nearest_target(worker_id: int, target_pool: Dictionary) -> int:
     if not positions.has(worker_id) or not levels.has(worker_id):
@@ -114,6 +114,14 @@ func _send_worker_to_elevator(worker_id: int, fsm: WorkerFSMComponent):
     if elevator_id != -1:
         fsm.target_entity_id = elevator_id
         fsm.current_state = WorkerFSMComponent.WorkerState.WALKING_TO_ELEVATOR
-    # else:
+    else:
         # Fallback to desk if no elevator is found
-        # _send_worker_to_desk(worker_id, fsm)
+        _send_worker_to_desk(worker_id, fsm)
+
+func _send_worker_to_desk(worker_id: int, fsm: WorkerFSMComponent):
+    if workers.has(worker_id):
+        var worker: WorkerComponent = workers[worker_id]
+        fsm.target_entity_id = worker.desk_entity_id
+        fsm.current_state = WorkerFSMComponent.WorkerState.WALKING_TO_DESK
+    else:
+        fsm.current_state = WorkerFSMComponent.WorkerState.IDLE
