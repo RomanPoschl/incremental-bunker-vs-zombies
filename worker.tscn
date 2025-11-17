@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://chirbx5nkw5cq"]
+[gd_scene load_steps=5 format=3 uid="uid://chirbx5nkw5cq"]
 
 [ext_resource type="Script" uid="uid://c54nh2m1n0n7m" path="res://worker.gd" id="1_8vnpx"]
 [ext_resource type="SpriteFrames" uid="uid://dv6dyuhhw3673" path="res://art/worker_animations.tres" id="1_26yh5"]
+[ext_resource type="Texture2D" uid="uid://cfd1g764mb2y8" path="res://art/ammo_box.tres" id="3_7p3b1"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_7p3b1"]
+size = Vector2(25, 25)
 
 [node name="Worker" type="Node2D"]
 z_index = 1
@@ -10,4 +14,19 @@ script = ExtResource("1_8vnpx")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(6.711, 5)
 sprite_frames = ExtResource("1_26yh5")
-animation = &"idle"
+animation = &"walk"
+
+[node name="AmmoBox" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(21, 4)
+scale = Vector2(2, 2)
+texture = ExtResource("3_7p3b1")
+
+[node name="ActionProgressBar" type="TextureProgressBar" parent="."]
+visible = false
+offset_left = -13.0
+offset_top = -84.0
+offset_right = 12.0
+offset_bottom = -59.0
+fill_mode = 4
+texture_progress = SubResource("PlaceholderTexture2D_7p3b1")

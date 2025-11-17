@@ -12,6 +12,8 @@ enum WorkerState
 
 @export var current_state: WorkerState
 @export var target_entity_id: int = -1
+@export var action_progress: float = 0.0 
+@export var action_total_time: float = 0.0
 
 func _init(in_current_state: WorkerState) -> void:
-	current_state = in_current_state
+  current_state = in_current_state

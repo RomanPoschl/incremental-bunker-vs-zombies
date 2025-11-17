@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b13bpelnbbrk0"]
+
+[ext_resource type="Script" uid="uid://dl4an7deqw2mg" path="res://empty_plot.gd" id="1_mp6go"]
+[ext_resource type="Texture2D" uid="uid://w3256q08yinm" path="res://art/empty_plot.tres" id="2_6s68b"]
+
+[node name="EmptyPlot" type="Node2D"]
+script = ExtResource("1_mp6go")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(3, 3)
+texture = ExtResource("2_6s68b")

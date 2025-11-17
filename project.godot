@@ -17,7 +17,9 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-EcsWorld="*res://EcsWorld.gd"
+Events="*res://Singletons/Events.gd"
+PlayerResources="*res://Singletons/player_resources.tscn"
+EcsWorld="*res://Singletons/EcsWorld.gd"
 
 [dotnet]
 

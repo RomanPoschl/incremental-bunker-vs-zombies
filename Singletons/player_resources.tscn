@@ -1,0 +1,12 @@
+[gd_scene load_steps=7 format=3 uid="uid://bsg4mot17klxp"]
+
+[ext_resource type="Script" uid="uid://c4kccjg47cdjy" path="res://Singletons/player_resources.gd" id="1_ct01j"]
+[ext_resource type="Script" uid="uid://cb07htxranda6" path="res://upgrades/upgrade_data.gd" id="2_u8534"]
+[ext_resource type="Resource" uid="uid://dv6p1s8ml2qp1" path="res://upgrades/worker_walking_speed.tres" id="3_qck1h"]
+[ext_resource type="Resource" uid="uid://c63vdqn6q21j8" path="res://upgrades/worker_capacity.tres" id="4_pic8m"]
+[ext_resource type="Resource" uid="uid://dnuku004k0fvs" path="res://upgrades/production_speed.tres" id="5_pic8m"]
+[ext_resource type="Resource" uid="uid://drmtqe32cn71l" path="res://upgrades/factory_inventory.tres" id="6_0p23n"]
+
+[node name="PlayerResources" type="Node"]
+script = ExtResource("1_ct01j")
+upgrade_definitions = Array[ExtResource("2_u8534")]([ExtResource("3_qck1h"), ExtResource("4_pic8m"), ExtResource("5_pic8m"), ExtResource("6_0p23n")])

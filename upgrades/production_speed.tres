@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=2 format=3 uid="uid://dnuku004k0fvs"]
+
+[ext_resource type="Script" uid="uid://cb07htxranda6" path="res://upgrades/upgrade_data.gd" id="1_8waqc"]
+
+[resource]
+script = ExtResource("1_8waqc")
+category = "factory"
+upgrade_id = "production_speed"
+name = "Production speed"
+base_cost = 150
+cost_multiplier = 2.0
+base_value = 0.5
+value_multiplier = 0.85
+metadata/_custom_type_script = "uid://cb07htxranda6"

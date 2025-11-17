@@ -2,8 +2,6 @@ extends Node
 
 var _next_entity_id: int = 0
 
-var global_ammo: Dictionary = {}
-
 var positions: Dictionary = {}
 var levels: Dictionary = {}
 var workers: Dictionary = {}
@@ -15,6 +13,7 @@ var elevators: Dictionary = {}
 var destroy_tags: Dictionary = {}
 var enemies: Dictionary = {}
 var turrets: Dictionary = {}
+var plots: Dictionary = {}
 
 var production_system: ProductionSystem
 var worker_decision_system: WorkerDecisionSystem
@@ -22,6 +21,8 @@ var navigation_system: NavigationSystem
 var worker_action_system: WorkerActionSystem
 var cleanup_system: CleanupSystem
 var turret_system: TurretSystem
+var enemy_movement_system: EnemyMovementSystem
+var enemy_spawner_system: EnemySpawnerSystem
 
 func _ready() -> void:
     production_system = ProductionSystem.new()
@@ -30,9 +31,20 @@ func _ready() -> void:
     worker_action_system = WorkerActionSystem.new()
     cleanup_system = CleanupSystem.new()
     turret_system = TurretSystem.new()
+    enemy_movement_system = EnemyMovementSystem.new()
+    enemy_spawner_system = EnemySpawnerSystem.new()
+    
+    Events.upgrade_purchased.connect(_on_upgrade_purchased)
+
+    var desk_id: int = create_entity()
+    var desk_pos = PositionComponent.new(Vector2(100, 300))
+    var desk_level = LevelComponent.new(1)
+    add_component(desk_id, DeskComponent.new())
+    add_component(desk_id, desk_pos)
+    add_component(desk_id, desk_level)
+    print("Spawned Desk (ID: %s)" % desk_id)
 
     var elevator_id: int = create_entity()
-
     var elev_pos = PositionComponent.new(Vector2(500, 300))
     var elev_level = LevelComponent.new(-1)
     add_component(elevator_id, ElevatorComponent.new())
@@ -50,7 +62,10 @@ func _ready() -> void:
     print("Spawned Factory (ID: %s)" % factory_id)
 
     var worker_id: int = create_entity()
-    var worker_comp = WorkerComponent.new(75.0, 3)
+    var worker_comp = WorkerComponent.new(
+      PlayerResources.upgrade_data["worker_speed"].current_value, 
+      PlayerResources.upgrade_data["worker_capacity"].current_value, 
+      desk_id)
     var fsm_comp = WorkerFSMComponent.new(WorkerFSMComponent.WorkerState.IDLE)
     var worker_pos = PositionComponent.new(Vector2(300, 300))
     var worker_level = LevelComponent.new(-1)
@@ -74,29 +89,7 @@ func _ready() -> void:
     add_component(turret_id, LevelComponent.new(1))
     print("Spawned Turret (ID: %s)" % turret_id)
 
-    var zombie_id = create_entity()
-    var z_comp = EnemyComponent.new()
-    z_comp.max_hp = 50
-    z_comp.current_hp = 50
-
-    var z_pos = PositionComponent.new(Vector2(325, 100))
-
-    add_component(zombie_id, z_comp)
-    add_component(zombie_id, z_pos)
-    add_component(zombie_id, LevelComponent.new(1))
-    print("Spawned Zombie (ID: %s)" % zombie_id)
-
-    var zombie_id2 = create_entity()
-    var z_comp2 = EnemyComponent.new()
-    z_comp2.max_hp = 50
-    z_comp2.current_hp = 50
-
-    var z_pos2 = PositionComponent.new(Vector2(275, 100))
-
-    add_component(zombie_id2, z_comp2)
-    add_component(zombie_id2, z_pos2)
-    add_component(zombie_id2, LevelComponent.new(1))
-    print("Spawned Zombie (ID: %s)" % zombie_id2)
+    spawn_new_level(1)
 
 func _process(delta: float) -> void:
     if production_system:
@@ -113,6 +106,12 @@ func _process(delta: float) -> void:
 
     if turret_system:
         turret_system.update(delta)
+
+    if enemy_movement_system:
+        enemy_movement_system.update(delta)
+
+    if enemy_spawner_system:
+        enemy_spawner_system.update(delta)
 
     if cleanup_system:
         cleanup_system.update()
@@ -146,6 +145,8 @@ func add_component(entity_id: int, component: Resource) -> void:
         enemies[entity_id] = component
     elif component is TurretComponent:
         turrets[entity_id] = component
+    elif component is PlotComponent:
+        plots[entity_id] = component
     else:
         push_warning("Unknown component type added: %s" % component.get_class())
 
@@ -165,27 +166,54 @@ func destroy_entity_now(entity_id: int):
     destroy_tags.erase(entity_id)
     enemies.erase(entity_id)
     turrets.erase(entity_id)
+    plots.erase(entity_id)
+    destroy_tags.erase(entity_id)
 
-    # TODO: Add ID to a recycle list
 
-func deposit_ammo(ammo_type: String, amount: int):
-    if not global_ammo.has(ammo_type):
-        global_ammo[ammo_type] = 0
+func _on_upgrade_purchased(upgrade_id: String, new_value):
+    match upgrade_id:
+        "worker_speed":
+            apply_worker_speed_to_all(new_value)
+        "worker_capacity":
+            apply_worker_capacity_to_all(new_value)
+        "production_speed":
+            apply_production_speed_to_all(new_value)
+        "factory_inventory":
+            apply_inventory_to_all(int(new_value))
+        _:
+            pass # Unknown upgrade
 
-    global_ammo[ammo_type] += amount
-    print("Banked %s %s. Total: %s" % [amount, ammo_type, global_ammo[ammo_type]])
+func apply_worker_speed_to_all(new_worker_speed: float) -> void:
+    for worker_id in workers:
+        var worker: WorkerComponent = workers[worker_id]
+        worker.move_speed = new_worker_speed
 
-func get_ammo_count(ammo_type: String) -> int:
-    if global_ammo.has(ammo_type):
-        return global_ammo[ammo_type]
-    return 0
+func apply_worker_capacity_to_all(new_capacity: int):
+    for worker_id in workers:
+        workers[worker_id].stack_capacity = int(new_capacity) # Ensure it's an int
 
-func spend_ammo(ammo_type: String, amount: int) -> bool:
-    if not global_ammo.has(ammo_type):
-        return false
+func apply_production_speed_to_all(new_time: float):
+    for factory_id in productions:
+        productions[factory_id].production_time = new_time
 
-    if global_ammo[ammo_type] >= amount:
-        global_ammo[ammo_type] -= amount
-        return true
+func apply_inventory_to_all(new_capacity: int):
+    for factory_id in productions:
+        productions[factory_id].max_internal_inventory = new_capacity
 
-    return false
+func spawn_new_level(level_number: int):
+    var level_y = PlayerResources.LEVEL_BASE_Y + (level_number - 1) * PlayerResources.LEVEL_HEIGHT
+    
+    print("Spawning 6 plots for level %s at Y=%s" % [level_number, level_y])
+    
+    for i in range(6):
+        var plot_x = PlayerResources.PLOT_START_X + (i * PlayerResources.PLOT_SPACING)
+        _spawn_plot(Vector2(plot_x, level_y), level_number)
+        
+func _spawn_plot(pos: Vector2, level: int):
+    var plot_id: int = create_entity()
+
+    var pos_comp = PositionComponent.new(pos)
+    var level_comp = LevelComponent.new(level)
+    add_component(plot_id, PlotComponent.new())
+    add_component(plot_id, pos_comp)
+    add_component(plot_id, level_comp)

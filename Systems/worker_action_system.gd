@@ -8,6 +8,8 @@ var positions: Dictionary
 var levels: Dictionary
 var elevators: Dictionary
 
+const ACTION_TIME: float = 2.0
+
 func _init():
     self.fsms = EcsWorld.fsms
     self.workers = EcsWorld.workers
@@ -24,24 +26,34 @@ func update(delta: float):
 
         match fsm.current_state:
             WorkerFSMComponent.WorkerState.PICKING_UP_AMMO:
-                _handle_pickup(worker_id, fsm)
+                _handle_pickup(worker_id, fsm, delta)
 
             WorkerFSMComponent.WorkerState.DROPPING_OFF_AMMO:
-                _handle_dropoff(worker_id, fsm)
+                _handle_dropoff(worker_id, fsm, delta)
 
-func _handle_pickup(worker_id: int, fsm: WorkerFSMComponent):
-    var factory_id: int = fsm.target_entity_id
+func _handle_pickup(worker_id: int, fsm: WorkerFSMComponent, delta: float):
+    if fsm.action_progress == 0:
+        if not productions.has(fsm.target_entity_id) or not workers.has(worker_id):
+            _send_worker_to_desk(worker_id, fsm)
+            return
+        var prod: ProductionComponent = productions[fsm.target_entity_id]
+        if prod.internal_inventory <= 0:
+            _send_worker_to_desk(worker_id, fsm)
+            return
 
-    if not productions.has(factory_id) or not workers.has(worker_id):
-        # _send_worker_to_desk(worker_id, fsm) # Use helper
+        fsm.action_total_time = ACTION_TIME
+        fsm.action_progress = 0.001
         return
+  
+    fsm.action_progress += delta
+    
+    if fsm.action_progress < fsm.action_total_time:
+        return
+        
+    var factory_id: int = fsm.target_entity_id
 
     var prod: ProductionComponent = productions[factory_id]
     var worker: WorkerComponent = workers[worker_id]
-
-    if prod.internal_inventory <= 0:
-        # _send_worker_to_desk(worker_id, fsm) # Use helper
-        return
 
     var inventory: InventoryComponent
     if not inventories.has(worker_id):
@@ -65,24 +77,37 @@ func _handle_pickup(worker_id: int, fsm: WorkerFSMComponent):
         prod.internal_inventory -= amount_to_take
         stacks_picked_up += 1
 
+    fsm.action_progress = 0.0
+    fsm.action_total_time = 0.0
     if stacks_picked_up > 0 or not inventory.stacks.is_empty():
         _send_worker_to_elevator(worker_id, fsm)
 
-func _handle_dropoff(worker_id: int, fsm: WorkerFSMComponent):
-    if not inventories.has(worker_id):
-        # _send_worker_to_desk(worker_id, fsm)
+func _handle_dropoff(worker_id: int, fsm: WorkerFSMComponent, delta: float):
+    if fsm.action_progress == 0:
+        if not inventories.has(worker_id):
+            _send_worker_to_desk(worker_id, fsm)
+            return
+        fsm.action_total_time = ACTION_TIME
+        fsm.action_progress = 0.001 
         return
+
+    fsm.action_progress += delta
+
+    if fsm.action_progress < fsm.action_total_time:
+      return
 
     var inventory: InventoryComponent = inventories[worker_id]
     if inventory.stacks.is_empty():
-        # _send_worker_to_desk(worker_id, fsm)
+        _send_worker_to_desk(worker_id, fsm)
         return
 
     for stack: StackComponent in inventory.stacks:
-        EcsWorld.deposit_ammo(stack.ammo_type, stack.amount)
+        PlayerResources.deposit_ammo(stack.ammo_type, stack.amount)
 
     inventory.stacks.clear()
-    fsm.current_state = WorkerFSMComponent.WorkerState.IDLE
+    fsm.action_progress = 0.0
+    fsm.action_total_time = 0.0
+    _send_worker_to_desk(worker_id, fsm)
 
 func _find_nearest_target(worker_id: int, target_pool: Dictionary) -> int:
     if not positions.has(worker_id) or not levels.has(worker_id):
@@ -114,6 +139,13 @@ func _send_worker_to_elevator(worker_id: int, fsm: WorkerFSMComponent):
     if elevator_id != -1:
         fsm.target_entity_id = elevator_id
         fsm.current_state = WorkerFSMComponent.WorkerState.WALKING_TO_ELEVATOR
-    # else:
-        # Fallback to desk if no elevator is found
-        # _send_worker_to_desk(worker_id, fsm)
+    else:
+        _send_worker_to_desk(worker_id, fsm)
+
+func _send_worker_to_desk(worker_id: int, fsm: WorkerFSMComponent):
+    if workers.has(worker_id):
+        var worker: WorkerComponent = workers[worker_id]
+        fsm.target_entity_id = worker.desk_entity_id
+        fsm.current_state = WorkerFSMComponent.WorkerState.WALKING_TO_DESK
+    else:
+        fsm.current_state = WorkerFSMComponent.WorkerState.IDLE

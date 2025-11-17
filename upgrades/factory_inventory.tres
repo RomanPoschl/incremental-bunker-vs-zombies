@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=2 format=3 uid="uid://drmtqe32cn71l"]
+
+[ext_resource type="Script" uid="uid://cb07htxranda6" path="res://upgrades/upgrade_data.gd" id="1_y8i4s"]
+
+[resource]
+script = ExtResource("1_y8i4s")
+category = "factory"
+upgrade_id = "factory_inventory"
+name = "Factory Storage"
+cost_multiplier = 1.8
+base_value = 200.0
+value_additive = 100.0
+metadata/_custom_type_script = "uid://cb07htxranda6"
