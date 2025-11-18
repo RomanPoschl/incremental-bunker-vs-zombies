@@ -3,6 +3,12 @@ extends Node
 @export var upgrade_definitions: Array[UpgradeData] = []
 var upgrade_data: Dictionary = {}
 
+@export var all_ammo_types: Array[AmmoType] = []
+var ammo_db = {}
+
+@export var all_factory_types: Array[FactoryType] = []
+var factory_db = {}
+
 var money: int = 100
 
 var global_ammo: Dictionary = {}
@@ -21,6 +27,14 @@ func _ready() -> void:
         runtime_copy.initialize()
         upgrade_data[runtime_copy.upgrade_id] = runtime_copy
         print("Loaded upgrade: %s" % runtime_copy.name)
+        
+    for ammo in all_ammo_types:
+        ammo_db[ammo.id] = ammo
+        print("Loaded ammo type: %s" % ammo.id)
+        
+    for factory in all_factory_types:
+        factory_db[factory.id] = factory
+        print("Loaded factory type: %s" % factory.id)
 
 func add_money(amount: int) -> void:
     money += amount
@@ -31,22 +45,27 @@ func spend_money(amount: int) -> bool:
         return true
     return false
 
-func deposit_ammo(ammo_type: String, amount: int):
+func deposit_ammo(ammo_type: AmmoType, amount: int):
     if not global_ammo.has(ammo_type):
         global_ammo[ammo_type] = 0
     global_ammo[ammo_type] += amount
 
-func spend_ammo(ammo_type: String, amount: int) -> bool:
-    if not global_ammo.has(ammo_type):
-        return false
-    if global_ammo[ammo_type] >= amount:
-        global_ammo[ammo_type] -= amount
+func spend_ammo(amount: int) -> bool:
+    var types = global_ammo.keys()
+    var t = types[randi_range(0, types.size() - 1)]
+
+    if global_ammo[t] >= amount:
+        global_ammo[t] -= amount
         return true
+
     return false
 
-func get_ammo_count(ammo_type: String) -> int:
-    if global_ammo.has(ammo_type):
-        return global_ammo[ammo_type]
+func get_ammo_count() -> int:
+    var bullet_count = 0
+    if not global_ammo.is_empty():
+        for k in global_ammo.keys():
+            bullet_count += global_ammo[k]
+        return bullet_count
     return 0
 
 func purchase_new_level():

@@ -8,11 +8,13 @@ func _ready() -> void:
   Events.open_upgrade_window.connect(open)
 
 func open(type: String) -> void:
-  
+  for ch in container.get_children():
+    ch.queue_free()
+    
   for t in PlayerResources.upgrade_data.keys():
     var u = PlayerResources.upgrade_data[t]
     
-    if u.type == type:
+    if u.category == type:
       var btn = upgrade_btn_scene.instantiate()
       btn.upgrade_id = u.upgrade_id
       container.add_child(btn)

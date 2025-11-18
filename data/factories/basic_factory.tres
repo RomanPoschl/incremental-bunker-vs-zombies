@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="FactoryType" load_steps=5 format=3 uid="uid://vteqw7hfbres"]
+
+[ext_resource type="Script" uid="uid://b4578gmw4f8mp" path="res://data/factory_type.gd" id="1_lil7o"]
+[ext_resource type="Resource" uid="uid://h1u1tmjy8yk3" path="res://data/ammo/basic_bullet.tres" id="1_oxrvh"]
+[ext_resource type="Texture2D" uid="uid://d2it4e4noxb1l" path="res://art/factory.tres" id="3_nyqep"]
+
+[sub_resource type="GDScript" id="GDScript_aea8s"]
+
+[resource]
+script = ExtResource("1_lil7o")
+id = "basic_factory"
+display_name = "Factory"
+texture = ExtResource("3_nyqep")
+output_ammo = ExtResource("1_oxrvh")
+metadata/_custom_type_script = "uid://b4578gmw4f8mp"

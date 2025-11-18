@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AmmoType" load_steps=3 format=3 uid="uid://c8ouuea5b2dvt"]
+
+[ext_resource type="Texture2D" uid="uid://cfd1g764mb2y8" path="res://art/ammo_box.tres" id="1_okf3l"]
+[ext_resource type="Script" uid="uid://ciru7q4amrta4" path="res://data/ammo_type.gd" id="1_wn8wt"]
+
+[resource]
+script = ExtResource("1_wn8wt")
+id = "freeze_bullet"
+display_name = "Freeze bullet"
+icon = ExtResource("1_okf3l")
+damage = 3
+damage_type = "ice"
+metadata/_custom_type_script = "uid://ciru7q4amrta4"

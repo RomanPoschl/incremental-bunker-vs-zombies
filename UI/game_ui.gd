@@ -7,6 +7,8 @@ var ammo_labels: Dictionary = {}
 var buy_level_button: Button
 var player_input_node
 
+var active_plot_id: int = -1
+
 func _ready() -> void:
     var label = Label.new()
     label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -16,6 +18,8 @@ func _ready() -> void:
     buy_level_button = Button.new()
     container.add_child(buy_level_button)
     buy_level_button.pressed.connect(_on_buy_level_pressed)
+    
+    Events.request_build_menu.connect(_on_build_menu_requested)
 
 func _process(delta: float) -> void:
     money_label.text = "%s: %s" % ["MONEY", PlayerResources.money]
@@ -37,7 +41,29 @@ func _process(delta: float) -> void:
             ammo_labels[ammo_type] = label
 
         var label = ammo_labels[ammo_type]
-        label.text = "%s: %s" % [ammo_type.capitalize(), amount]
+        label.text = "%s: %s" % [ammo_type.display_name.capitalize(), amount]
 
 func _on_buy_level_pressed():
     PlayerResources.purchase_new_level()
+
+func _on_build_menu_requested(plot_id):
+    active_plot_id = plot_id
+    for child in $BuildMenu/HBoxContainer.get_children():
+        child.queue_free()
+        
+    for factory_id in PlayerResources.factory_db:
+        var factory_data: FactoryType = PlayerResources.factory_db[factory_id]
+        
+        var btn = Button.new()
+        btn.text = "%s ($%d)" % [factory_data.display_name, factory_data.build_cost]
+        btn.pressed.connect(_on_build_factory_pressed.bind(factory_data))
+        
+        $BuildMenu/HBoxContainer.add_child(btn)
+        
+    $BuildMenu.visible = true
+
+func _on_build_factory_pressed(data: FactoryType):
+    if PlayerResources.spend_money(data.build_cost):
+        EcsWorld.build_factory_at_plot(active_plot_id, data)
+        active_plot_id = 0
+        $BuildMenu.visible = false

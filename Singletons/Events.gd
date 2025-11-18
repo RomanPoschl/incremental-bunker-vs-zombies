@@ -1,5 +1,7 @@
 extends Node
 
+signal request_build_menu(plot_id: int)
+
 signal open_upgrade_window(type: String)
 
 signal plot_upgraded(entity_id)

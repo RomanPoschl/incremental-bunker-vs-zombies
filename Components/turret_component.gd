@@ -1,6 +1,5 @@
 class_name TurretComponent extends Resource
 
-@export var ammo_type: String = "basic_bullet"
 @export var fire_rate: float = 1.0
 @export var range_radius: float = 300.0
 @export var damage: int = 5

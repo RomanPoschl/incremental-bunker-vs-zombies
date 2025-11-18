@@ -69,9 +69,9 @@ func _handle_pickup(worker_id: int, fsm: WorkerFSMComponent, delta: float):
         if prod.internal_inventory <= 0:
             break
 
-        var amount_to_take: int = min(prod.stack_size, prod.internal_inventory)
+        var amount_to_take: int = min(prod.modified_stack_size, prod.internal_inventory)
 
-        var new_stack = StackComponent.new(prod.ammo_type, amount_to_take)
+        var new_stack = StackComponent.new(prod.factory_type.output_ammo, amount_to_take)
         inventory.stacks.append(new_stack)
 
         prod.internal_inventory -= amount_to_take
@@ -80,7 +80,9 @@ func _handle_pickup(worker_id: int, fsm: WorkerFSMComponent, delta: float):
     fsm.action_progress = 0.0
     fsm.action_total_time = 0.0
     if stacks_picked_up > 0 or not inventory.stacks.is_empty():
-        _send_worker_to_elevator(worker_id, fsm)
+        var held_ammo: AmmoType = inventory.stacks[0].ammo_type
+        var target_id = _find_factory_needing_input(worker_id, held_ammo)
+        _send_worker_to_target(worker_id, fsm, target_id)
 
 func _handle_dropoff(worker_id: int, fsm: WorkerFSMComponent, delta: float):
     if fsm.action_progress == 0:
@@ -134,14 +136,19 @@ func _find_nearest_target(worker_id: int, target_pool: Dictionary) -> int:
 
     return closest_target_id
 
-func _send_worker_to_elevator(worker_id: int, fsm: WorkerFSMComponent):
+func _send_worker_to_target(worker_id: int, fsm: WorkerFSMComponent, target_id: int):
+    if target_id != -1:
+        fsm.target_entity_id = target_id
+        fsm.current_state = WorkerFSMComponent.WorkerState.WALKING_TO_ELEVATOR
+        return
+
     var elevator_id: int = _find_nearest_target(worker_id, elevators)
     if elevator_id != -1:
         fsm.target_entity_id = elevator_id
         fsm.current_state = WorkerFSMComponent.WorkerState.WALKING_TO_ELEVATOR
     else:
         _send_worker_to_desk(worker_id, fsm)
-
+    
 func _send_worker_to_desk(worker_id: int, fsm: WorkerFSMComponent):
     if workers.has(worker_id):
         var worker: WorkerComponent = workers[worker_id]
@@ -149,3 +156,13 @@ func _send_worker_to_desk(worker_id: int, fsm: WorkerFSMComponent):
         fsm.current_state = WorkerFSMComponent.WorkerState.WALKING_TO_DESK
     else:
         fsm.current_state = WorkerFSMComponent.WorkerState.IDLE
+
+func _find_factory_needing_input(worker_id: int, ammo_res: AmmoType) -> int:
+    for factory_id in productions:
+        var prod = productions[factory_id]
+        var recipe = prod.factory_type
+        
+        if recipe.input_ammo.has(ammo_res):
+            if prod.current_input_count < 100:
+                return factory_id
+    return -1

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AmmoType" load_steps=3 format=3 uid="uid://h1u1tmjy8yk3"]
+
+[ext_resource type="Texture2D" uid="uid://cfd1g764mb2y8" path="res://art/ammo_box.tres" id="1_p1eag"]
+[ext_resource type="Script" uid="uid://ciru7q4amrta4" path="res://data/ammo_type.gd" id="1_sqayg"]
+
+[resource]
+script = ExtResource("1_sqayg")
+id = "basic_bullet"
+display_name = "Basic bullet"
+icon = ExtResource("1_p1eag")
+metadata/_custom_type_script = "uid://ciru7q4amrta4"

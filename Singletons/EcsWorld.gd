@@ -52,15 +52,6 @@ func _ready() -> void:
     add_component(elevator_id, elev_level)
     print("Spawned Elevator (ID: %s)" % elevator_id)
 
-    var factory_id: int = create_entity()
-    var prod_comp = ProductionComponent.new("basic_bullet", 10, 1, 50, 200)
-    var fact_pos = PositionComponent.new(Vector2(300, 300))
-    var fact_level = LevelComponent.new(-1)
-    add_component(factory_id, prod_comp)
-    add_component(factory_id, fact_pos)
-    add_component(factory_id, fact_level)
-    print("Spawned Factory (ID: %s)" % factory_id)
-
     var worker_id: int = create_entity()
     var worker_comp = WorkerComponent.new(
       PlayerResources.upgrade_data["worker_speed"].current_value, 
@@ -78,7 +69,6 @@ func _ready() -> void:
 
     var turret_id = create_entity()
     var t_comp = TurretComponent.new()
-    t_comp.ammo_type = "basic_bullet"
     t_comp.fire_rate = 2.0
     t_comp.damage = 5
 
@@ -89,7 +79,7 @@ func _ready() -> void:
     add_component(turret_id, LevelComponent.new(1))
     print("Spawned Turret (ID: %s)" % turret_id)
 
-    spawn_new_level(1)
+    spawn_new_level(-1)
 
 func _process(delta: float) -> void:
     if production_system:
@@ -115,7 +105,6 @@ func _process(delta: float) -> void:
 
     if cleanup_system:
         cleanup_system.update()
-
 
 func create_entity() -> int:
     var new_id = _next_entity_id
@@ -169,7 +158,6 @@ func destroy_entity_now(entity_id: int):
     plots.erase(entity_id)
     destroy_tags.erase(entity_id)
 
-
 func _on_upgrade_purchased(upgrade_id: String, new_value):
     match upgrade_id:
         "worker_speed":
@@ -194,14 +182,14 @@ func apply_worker_capacity_to_all(new_capacity: int):
 
 func apply_production_speed_to_all(new_time: float):
     for factory_id in productions:
-        productions[factory_id].production_time = new_time
+        productions[factory_id].modified_production_time = new_time
 
 func apply_inventory_to_all(new_capacity: int):
     for factory_id in productions:
         productions[factory_id].max_internal_inventory = new_capacity
 
 func spawn_new_level(level_number: int):
-    var level_y = PlayerResources.LEVEL_BASE_Y + (level_number - 1) * PlayerResources.LEVEL_HEIGHT
+    var level_y = PlayerResources.LEVEL_BASE_Y + (-level_number - 1) * PlayerResources.LEVEL_HEIGHT
     
     print("Spawning 6 plots for level %s at Y=%s" % [level_number, level_y])
     
@@ -217,3 +205,11 @@ func _spawn_plot(pos: Vector2, level: int):
     add_component(plot_id, PlotComponent.new())
     add_component(plot_id, pos_comp)
     add_component(plot_id, level_comp)
+    
+func build_factory_at_plot(plot_id: int, data: FactoryType):
+    plots.erase(plot_id)
+    
+    var prod_comp = ProductionComponent.new()
+    prod_comp.factory_type = data 
+    prod_comp.modified_production_time = data.production_time
+    add_component(plot_id, prod_comp)

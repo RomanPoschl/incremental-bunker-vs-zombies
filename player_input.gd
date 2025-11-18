@@ -63,14 +63,4 @@ func _handle_click(mouse_pos: Vector2) -> void:
             return
 
 func _try_build_on_plot(plot_id: int):
-    if PlayerResources.spend_money(factory_cost):
-        plots.erase(plot_id)
-
-        var prod_comp = ProductionComponent.new("basic_bullet", 0.5, 1, 50, 200)
-        EcsWorld.add_component(plot_id, prod_comp)
-      
-        Events.plot_upgraded.emit(plot_id)
-        
-        print("Upgraded plot %s to a Factory!" % plot_id)
-    else:
-        print("Not enough money to build!")
+    Events.request_build_menu.emit(plot_id)
