@@ -21,7 +21,7 @@ func _ready():
     positions = EcsWorld.positions
     plots = EcsWorld.plots
     
-    Events.plot_upgraded.connect(_on_plot_upgraded)
+    Events.factory_builded.connect(_on_plot_upgraded)
 
 func _process(delta: float):
     _update_structures(productions, factory_texture, Color.RED)

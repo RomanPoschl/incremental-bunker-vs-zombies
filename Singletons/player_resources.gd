@@ -9,7 +9,7 @@ var ammo_db = {}
 @export var all_factory_types: Array[FactoryType] = []
 var factory_db = {}
 
-var money: int = 100
+var money: int = 10000
 
 var global_ammo: Dictionary = {}
 

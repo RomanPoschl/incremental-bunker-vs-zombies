@@ -209,7 +209,8 @@ func _spawn_plot(pos: Vector2, level: int):
 func build_factory_at_plot(plot_id: int, data: FactoryType):
     plots.erase(plot_id)
     
-    var prod_comp = ProductionComponent.new()
-    prod_comp.factory_type = data 
+    var prod_comp = ProductionComponent.new(data)
     prod_comp.modified_production_time = data.production_time
     add_component(plot_id, prod_comp)
+    
+    Events.factory_builded.emit(plot_id)
