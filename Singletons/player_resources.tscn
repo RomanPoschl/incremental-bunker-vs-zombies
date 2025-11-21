@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bsg4mot17klxp"]
+[gd_scene load_steps=15 format=3 uid="uid://bsg4mot17klxp"]
 
 [ext_resource type="Script" uid="uid://c4kccjg47cdjy" path="res://Singletons/player_resources.gd" id="1_ct01j"]
 [ext_resource type="Script" uid="uid://cb07htxranda6" path="res://data/upgrade_data.gd" id="2_u8534"]
@@ -12,9 +12,12 @@
 [ext_resource type="Script" uid="uid://b4578gmw4f8mp" path="res://data/factory_type.gd" id="10_1wlbc"]
 [ext_resource type="Resource" uid="uid://vteqw7hfbres" path="res://data/factories/basic_factory.tres" id="11_bw0kd"]
 [ext_resource type="Resource" uid="uid://bs1ki1r5mev3d" path="res://data/factories/freeze_lab.tres" id="12_gsbrc"]
+[ext_resource type="Script" uid="uid://blvgesmfsughs" path="res://data/structure_type.gd" id="13_4vhns"]
+[ext_resource type="Resource" uid="uid://ct8h1ido0cm2u" path="res://data/structures/desk.tres" id="14_1wlbc"]
 
 [node name="PlayerResources" type="Node"]
 script = ExtResource("1_ct01j")
 upgrade_definitions = Array[ExtResource("2_u8534")]([ExtResource("3_qck1h"), ExtResource("4_pic8m"), ExtResource("5_pic8m"), ExtResource("6_0p23n")])
 all_ammo_types = Array[ExtResource("7_mfjce")]([ExtResource("8_r8gt5"), ExtResource("9_4vhns")])
 all_factory_types = Array[ExtResource("10_1wlbc")]([ExtResource("11_bw0kd"), ExtResource("12_gsbrc")])
+all_structure_types = Array[ExtResource("13_4vhns")]([ExtResource("14_1wlbc")])

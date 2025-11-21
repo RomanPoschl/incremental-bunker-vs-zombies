@@ -11,7 +11,12 @@ var modified_max_storage: int = 200
 var modified_production_amount: int = 1
 var modified_stack_size: int = 10
 
-func can_produce() -> bool:
+var last_visit_time: float = 0.0
+
+var production_ready: bool:
+  get: return internal_inventory > 0
+
+func has_ingredients() -> bool:
     var recipe = recipe_blueprint
     
     if recipe.ingredients.is_empty():
@@ -34,3 +39,15 @@ func has_input_space(ammo_type_id: String) -> bool:
             return current_count < modified_max_storage
             
     return false
+
+func produce() -> void:
+    self.current_progress -= self.modified_production_time
+            
+    # CONSUME INPUT
+    if not recipe_blueprint.ingredients.is_empty():
+        for ingredient in recipe_blueprint.ingredients:
+            var input_id = ingredient.ammo_type.id
+            self.current_input_inventory[input_id] -= ingredient.count # Consume required count
+    
+    # PRODUCE OUTPUT
+    self.internal_inventory += 1

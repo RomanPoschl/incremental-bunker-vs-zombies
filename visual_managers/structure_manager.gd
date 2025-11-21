@@ -8,7 +8,7 @@ extends Node
 var structure_nodes: Dictionary = {}
 
 var productions: Dictionary
-var elevators: Dictionary
+var warehouses: Dictionary
 var desks: Dictionary
 var plots: Dictionary
 var positions: Dictionary
@@ -16,7 +16,7 @@ var positions: Dictionary
 
 func _ready():
     productions = EcsWorld.productions
-    elevators = EcsWorld.elevators
+    warehouses = EcsWorld.warehouses
     desks = EcsWorld.desks
     positions = EcsWorld.positions
     plots = EcsWorld.plots
@@ -25,7 +25,7 @@ func _ready():
 
 func _process(delta: float):
     _update_structures(productions, factory_texture, Color.RED)
-    _update_structures(elevators, elevator_texture, Color.BLUE)
+    _update_structures(warehouses, elevator_texture, Color.BLUE)
     _update_structures(desks, desk_texture, Color.BROWN)
     _update_structures(plots, plot_scene, Color.BROWN)
 
@@ -51,7 +51,7 @@ func _update_structures(pool: Dictionary, scene: PackedScene, default_color: Col
 func _handle_cleanup():
     var ids_to_remove = []
     for id in structure_nodes:
-        var exists = productions.has(id) or elevators.has(id) or desks.has(id) or plots.has(id)
+        var exists = productions.has(id) or warehouses.has(id) or desks.has(id) or plots.has(id)
         if not exists:
             ids_to_remove.append(id)
 

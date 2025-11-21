@@ -72,12 +72,10 @@ func _create_worker_visual(worker_id: int) -> Worker:
     worker.sprite.play("idle")
     return worker
 
-func _update_animation(worker: Worker, state: WorkerFSMComponent.WorkerState):
+func _update_animation(worker: Worker, state: WorkerComponents.WorkerState):
     var new_anim: String
     match state:
-        WorkerFSMComponent.WorkerState.WALKING_TO_DESK, \
-        WorkerFSMComponent.WorkerState.WALKING_TO_ELEVATOR, \
-        WorkerFSMComponent.WorkerState.WALKING_TO_FACTORY:
+        WorkerComponents.WorkerState.WALKING:
             new_anim = "walk"
         _:
             new_anim = "idle"

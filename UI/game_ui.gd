@@ -25,7 +25,7 @@ func _process(delta: float) -> void:
     money_label.text = "%s: %s" % ["MONEY", PlayerResources.money]
     
     var cost = PlayerResources.next_level_cost
-    var next_level = PlayerResources.current_max_level + 1
+    var next_level = PlayerResources.current_max_level - 1
     buy_level_button.text = "Buy Level %s ($%s)" % [next_level, cost]
     buy_level_button.disabled = (PlayerResources.money < cost)
         
@@ -52,15 +52,26 @@ func _on_build_menu_requested(plot_id):
         child.queue_free()
         
     for factory_id in PlayerResources.factory_db:
-        var factory_data: FactoryType = PlayerResources.factory_db[factory_id]
+        var data = PlayerResources.factory_db[factory_id]
+        _add_build_button(data.display_name, data.build_cost, _on_build_factory_pressed.bind(data))
         
-        var btn = Button.new()
-        btn.text = "%s ($%d)" % [factory_data.display_name, factory_data.build_cost]
-        btn.pressed.connect(_on_build_factory_pressed.bind(factory_data))
-        
-        $BuildMenu/HBoxContainer.add_child(btn)
-        
+    for struct_id in PlayerResources.structure_db:
+        var data = PlayerResources.structure_db[struct_id]
+        _add_build_button(data.display_name, data.build_cost, _on_build_structure_pressed.bind(data))
+
     $BuildMenu.visible = true
+
+func _add_build_button(text, cost, callback):
+    var btn = Button.new()
+    btn.text = "%s ($%d)" % [text, cost]
+    btn.pressed.connect(callback)
+    $BuildMenu/HBoxContainer.add_child(btn)
+
+func _on_build_structure_pressed(data: StructureType):
+    if PlayerResources.spend_money(data.build_cost):
+        EcsWorld.build_structure_at_plot(active_plot_id, data)
+        active_plot_id = 0
+        $BuildMenu.visible = false
 
 func _on_build_factory_pressed(data: FactoryType):
     if PlayerResources.spend_money(data.build_cost):

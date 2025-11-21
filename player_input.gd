@@ -27,7 +27,10 @@ func _unhandled_input(event: InputEvent):
     if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
         _handle_click(event.position)
 
-func _handle_click(mouse_pos: Vector2) -> void:
+func _handle_click(screen_mouse_pos: Vector2) -> void:
+    var canvas_transform = get_viewport().get_canvas_transform()
+    var mouse_pos = canvas_transform.affine_inverse() * screen_mouse_pos
+    
     for factory_id in productions:
         if not positions.has(factory_id): continue
         

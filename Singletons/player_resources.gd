@@ -9,6 +9,9 @@ var ammo_db = {}
 @export var all_factory_types: Array[FactoryType] = []
 var factory_db = {}
 
+@export var all_structure_types: Array[StructureType] = []
+var structure_db = {}
+
 var money: int = 10000
 
 var global_ammo: Dictionary = {}
@@ -18,7 +21,7 @@ const LEVEL_HEIGHT: float = 200.0
 const PLOT_START_X: float = 200.0
 const PLOT_SPACING: float = 100.0
 
-var current_max_level: int = 1
+var current_max_level: int = -1
 var next_level_cost: int = 500
 
 func _ready() -> void:
@@ -35,6 +38,10 @@ func _ready() -> void:
     for factory in all_factory_types:
         factory_db[factory.id] = factory
         print("Loaded factory type: %s" % factory.id)
+        
+    for structure in all_structure_types:
+        structure_db[structure.id] = structure
+        print("Loaded structure type: %s" % structure.id)
 
 func add_money(amount: int) -> void:
     money += amount
@@ -70,12 +77,14 @@ func get_ammo_count() -> int:
 
 func purchase_new_level():
     if spend_money(next_level_cost):
-        current_max_level += 1
+        current_max_level -= 1
         next_level_cost = int(next_level_cost * 2.5) # Increase cost
         
         EcsWorld.spawn_new_level(current_max_level)
         
-        var new_y_pos = LEVEL_BASE_Y + (current_max_level - 1) * LEVEL_HEIGHT
+        var depth_index = abs(current_max_level) - 1
+        var new_y_pos = LEVEL_BASE_Y + (depth_index * LEVEL_HEIGHT)
+        
         Events.level_purchased.emit(new_y_pos)
 
 func get_upgrade_cost(upgrade_id: String) -> int:

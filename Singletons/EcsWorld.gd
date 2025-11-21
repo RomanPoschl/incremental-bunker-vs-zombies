@@ -1,5 +1,7 @@
 extends Node
 
+var game_time: float = 0.0
+
 var _next_entity_id: int = 0
 
 var positions: Dictionary = {}
@@ -9,7 +11,7 @@ var fsms: Dictionary = {}
 var inventories: Dictionary = {}
 var productions: Dictionary = {}
 var desks: Dictionary = {}
-var elevators: Dictionary = {}
+var warehouses: Dictionary = {}
 var destroy_tags: Dictionary = {}
 var enemies: Dictionary = {}
 var turrets: Dictionary = {}
@@ -44,27 +46,22 @@ func _ready() -> void:
     add_component(desk_id, desk_level)
     print("Spawned Desk (ID: %s)" % desk_id)
 
-    var elevator_id: int = create_entity()
-    var elev_pos = PositionComponent.new(Vector2(500, 300))
-    var elev_level = LevelComponent.new(-1)
-    add_component(elevator_id, ElevatorComponent.new())
-    add_component(elevator_id, elev_pos)
-    add_component(elevator_id, elev_level)
-    print("Spawned Elevator (ID: %s)" % elevator_id)
-
     var worker_id: int = create_entity()
     var worker_comp = WorkerComponent.new(
       PlayerResources.upgrade_data["worker_speed"].current_value, 
       PlayerResources.upgrade_data["worker_capacity"].current_value, 
       desk_id)
-    var fsm_comp = WorkerFSMComponent.new(WorkerFSMComponent.WorkerState.IDLE)
+    var fsm_comp = WorkerFSMComponent.new()
+    fsm_comp.current_state = WorkerComponents.WorkerState.IDLE
     var worker_pos = PositionComponent.new(Vector2(300, 300))
     var worker_level = LevelComponent.new(-1)
+    var inventory = InventoryComponent.new([])
 
     add_component(worker_id, worker_comp)
     add_component(worker_id, fsm_comp)
     add_component(worker_id, worker_pos)
     add_component(worker_id, worker_level)
+    add_component(worker_id, inventory)
     print("Spawned Worker (ID: %s)" % worker_id)
 
     var turret_id = create_entity()
@@ -82,6 +79,8 @@ func _ready() -> void:
     spawn_new_level(-1)
 
 func _process(delta: float) -> void:
+    game_time += delta
+    
     if production_system:
         production_system.update(delta)
 
@@ -126,8 +125,8 @@ func add_component(entity_id: int, component: Resource) -> void:
         productions[entity_id] = component
     elif component is DeskComponent:
         desks[entity_id] = component
-    elif component is ElevatorComponent:
-        elevators[entity_id] = component
+    elif component is WarehouseComponent:
+        warehouses[entity_id] = component
     elif component is DestroyComponent:
         destroy_tags[entity_id] = component
     elif component is EnemyComponent:
@@ -151,7 +150,7 @@ func destroy_entity_now(entity_id: int):
     inventories.erase(entity_id)
     productions.erase(entity_id)
     desks.erase(entity_id)
-    elevators.erase(entity_id)
+    warehouses.erase(entity_id)
     destroy_tags.erase(entity_id)
     enemies.erase(entity_id)
     turrets.erase(entity_id)
@@ -189,14 +188,18 @@ func apply_inventory_to_all(new_capacity: int):
         productions[factory_id].max_internal_inventory = new_capacity
 
 func spawn_new_level(level_number: int):
-    var level_y = PlayerResources.LEVEL_BASE_Y + (-level_number - 1) * PlayerResources.LEVEL_HEIGHT
+    var depth_index = abs(level_number) - 1
+    var level_y = PlayerResources.LEVEL_BASE_Y + (depth_index * PlayerResources.LEVEL_HEIGHT)
     
-    print("Spawning 6 plots for level %s at Y=%s" % [level_number, level_y])
+    print("Spawning level %s at Y=%s" % [level_number, level_y])
     
-    for i in range(6):
+    for i in range(5):
         var plot_x = PlayerResources.PLOT_START_X + (i * PlayerResources.PLOT_SPACING)
         _spawn_plot(Vector2(plot_x, level_y), level_number)
         
+    var warehouse_x = PlayerResources.PLOT_START_X + (5 * PlayerResources.PLOT_SPACING)
+    _spawn_warehouse(Vector2(warehouse_x, level_y), level_number)
+
 func _spawn_plot(pos: Vector2, level: int):
     var plot_id: int = create_entity()
 
@@ -205,12 +208,80 @@ func _spawn_plot(pos: Vector2, level: int):
     add_component(plot_id, PlotComponent.new())
     add_component(plot_id, pos_comp)
     add_component(plot_id, level_comp)
-    
+
+func _spawn_warehouse(pos: Vector2, level: int):
+    var warehouse_id: int = create_entity()
+    var warehouse_pos = PositionComponent.new(pos)
+    var warehouse_level = LevelComponent.new(level)
+    add_component(warehouse_id, WarehouseComponent.new())
+    add_component(warehouse_id, warehouse_pos)
+    add_component(warehouse_id, warehouse_level)
+    print("Spawned Warehouse (ID: %s)" % warehouse_id)
+
 func build_factory_at_plot(plot_id: int, data: FactoryType):
     plots.erase(plot_id)
     
-    var prod_comp = ProductionComponent.new(data)
+    var prod_comp = ProductionComponent.new()
+    prod_comp.recipe_blueprint = data
     prod_comp.modified_production_time = data.production_time
     add_component(plot_id, prod_comp)
     
     Events.factory_builded.emit(plot_id)
+
+func build_structure_at_plot(plot_id: int, data: StructureType):
+    # Remove Plot
+    plots.erase(plot_id)
+    
+    if data.category == "desk":
+        var desk_comp = DeskComponent.new()
+        desk_comp.max_workers = 3
+        add_component(plot_id, desk_comp)
+        spawn_worker_at_desk(plot_id)
+    elif data.category == "turret":
+        pass
+    
+    Events.factory_builded.emit(plot_id)
+        
+func spawn_worker_at_desk(desk_id: int) -> bool:
+    if not desks.has(desk_id): return false
+    var desk: DeskComponent = desks[desk_id]
+    
+    # Check Capacity (Local limit per desk)
+    if desk.current_workers >= desk.max_workers:
+        print("Desk is full!")
+        return false
+        
+    # Create Worker Entity
+    var worker_id = create_entity()
+    
+    # Get Desk Position
+    var desk_pos_vec = Vector2.ZERO
+    if positions.has(desk_id):
+        desk_pos_vec = positions[desk_id].position
+    
+    var worker_comp = WorkerComponent.new(
+      PlayerResources.upgrade_data["worker_speed"].current_value,
+      int(PlayerResources.upgrade_data["worker_capacity"].current_value),
+      desk_id
+    )
+    
+    var fsm = WorkerFSMComponent.new()
+    fsm.current_state = WorkerComponents.WorkerState.IDLE
+    
+    var pos = PositionComponent.new(desk_pos_vec)
+    
+    var level_id: int = -1
+    if levels.has(desk_id):
+        level_id = levels[desk_id].level
+        
+    var level = LevelComponent.new(level_id)
+    
+    add_component(worker_id, worker_comp)
+    add_component(worker_id, fsm)
+    add_component(worker_id, pos)
+    add_component(worker_id, level)
+    
+    # Update Desk Count
+    desk.current_workers += 1
+    
+    return true

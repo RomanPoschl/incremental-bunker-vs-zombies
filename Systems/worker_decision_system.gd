@@ -17,7 +17,7 @@ func update(delta: float) -> void:
     for worker_id in fsms:
         var fsm: WorkerFSMComponent = fsms[worker_id]
 
-        if fsm.current_state != WorkerFSMComponent.WorkerState.IDLE:
+        if fsm.current_state != WorkerComponents.WorkerState.IDLE:
             continue
 
         if not positions.has(worker_id) or not levels.has(worker_id):
@@ -26,29 +26,43 @@ func update(delta: float) -> void:
         var worker_pos: PositionComponent = positions[worker_id]
         var worker_level: LevelComponent = levels[worker_id]
 
-        var closest_factory_id: int = -1
-        var min_distance_sq: float = INF
-
+        var best_factory_id: int = -1
+        var highest_score: float = -INF
+        
         for factory_id in productions:
             var prod: ProductionComponent = productions[factory_id]
-
-            if not positions.has(factory_id) or not levels.has(factory_id):
-                continue
+            
+            if not positions.has(factory_id) or not levels.has(factory_id): continue
 
             var factory_level: LevelComponent = levels[factory_id]
-            if factory_level.level != worker_level.level:
-                continue
+            if factory_level.level != worker_level.level: 
+              continue
 
-            if prod.internal_inventory == 0:
-                continue
+            if not prod.production_ready: continue
+            
+            var factory_pos = positions[factory_id]
+            var dist = worker_pos.position.distance_to(factory_pos.position)
+            var score = -dist
+            
+            var recipe: FactoryType = prod.recipe_blueprint
+            if not recipe.ingredients.is_empty():
+                score += 2000.0
+                
+            var percent_full = float(prod.internal_inventory) / float(prod.modified_max_storage)
+            if percent_full >= 0.9:
+                score += 5000.0
+            elif percent_full >= 0.5:
+                score += 1000.0
+                
+            var time_ignored = EcsWorld.game_time - prod.last_visit_time
+            var aging_score = time_ignored * 50.0
+            score += aging_score
+                
+            if score > highest_score:
+                highest_score = score
+                best_factory_id = factory_id
 
-            var factory_pos: PositionComponent = positions[factory_id]
-            var dist_sq: float = worker_pos.position.distance_squared_to(factory_pos.position)
-
-            if dist_sq < min_distance_sq:
-                min_distance_sq = dist_sq
-                closest_factory_id = factory_id
-
-        if closest_factory_id != -1:
-            fsm.current_state = WorkerFSMComponent.WorkerState.WALKING_TO_FACTORY
-            fsm.target_entity_id = closest_factory_id
+        if best_factory_id != -1:
+            fsm.current_state = WorkerComponents.WorkerState.WALKING
+            fsm.next_state_after_walk = WorkerComponents.WorkerState.PICKING_UP
+            fsm.target_entity_id = best_factory_id

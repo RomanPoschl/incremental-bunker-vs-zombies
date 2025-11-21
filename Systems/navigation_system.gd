@@ -16,13 +16,7 @@ func update(delta: float):
     for worker_id in fsms:
         var fsm: WorkerFSMComponent = fsms[worker_id]
 
-        var is_walking: bool = (
-            fsm.current_state == WorkerFSMComponent.WorkerState.WALKING_TO_DESK or
-            fsm.current_state == WorkerFSMComponent.WorkerState.WALKING_TO_FACTORY or
-            fsm.current_state == WorkerFSMComponent.WorkerState.WALKING_TO_ELEVATOR
-        )
-
-        if not is_walking:
+        if fsm.current_state != WorkerComponents.WorkerState.WALKING:
             continue
 
         if not positions.has(worker_id) or not workers.has(worker_id):
@@ -32,7 +26,7 @@ func update(delta: float):
         var worker: WorkerComponent = workers[worker_id]
 
         if not positions.has(fsm.target_entity_id):
-            fsm.current_state = WorkerFSMComponent.WorkerState.IDLE
+            fsm.current_state = WorkerComponents.WorkerState.IDLE
             continue
 
         var target_pos: PositionComponent = positions[fsm.target_entity_id]
@@ -44,11 +38,4 @@ func update(delta: float):
             worker_pos.position += direction * worker.move_speed * delta
         else:
             worker_pos.position = target_pos.position
-
-            match fsm.current_state:
-                WorkerFSMComponent.WorkerState.WALKING_TO_FACTORY:
-                    fsm.current_state = WorkerFSMComponent.WorkerState.PICKING_UP_AMMO
-                WorkerFSMComponent.WorkerState.WALKING_TO_ELEVATOR:
-                    fsm.current_state = WorkerFSMComponent.WorkerState.DROPPING_OFF_AMMO
-                WorkerFSMComponent.WorkerState.WALKING_TO_DESK:
-                    fsm.current_state = WorkerFSMComponent.WorkerState.IDLE
+            fsm.current_state = fsm.next_state_after_walk

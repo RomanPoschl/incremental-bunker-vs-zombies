@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="StructureType" load_steps=3 format=3 uid="uid://ct8h1ido0cm2u"]
+
+[ext_resource type="Script" uid="uid://blvgesmfsughs" path="res://data/structure_type.gd" id="1_3qlui"]
+[ext_resource type="Texture2D" uid="uid://btduc76tmhmja" path="res://art/worker_desk.tres" id="2_1sa4k"]
+
+[resource]
+script = ExtResource("1_3qlui")
+id = "desk"
+display_name = "Office Desk"
+build_cost = 150
+texture = ExtResource("2_1sa4k")
+metadata/_custom_type_script = "uid://blvgesmfsughs"

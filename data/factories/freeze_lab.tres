@@ -1,10 +1,16 @@
-[gd_resource type="Resource" script_class="FactoryType" load_steps=6 format=3 uid="uid://bs1ki1r5mev3d"]
+[gd_resource type="Resource" script_class="FactoryType" load_steps=7 format=3 uid="uid://bs1ki1r5mev3d"]
 
+[ext_resource type="Script" uid="uid://d11htbgutocjr" path="res://data/ingredient_data.gd" id="1_bgwak"]
 [ext_resource type="Resource" uid="uid://c8ouuea5b2dvt" path="res://data/ammo/freeze_bullet.tres" id="1_c8phs"]
-[ext_resource type="Script" uid="uid://ciru7q4amrta4" path="res://data/ammo_type.gd" id="1_m2mur"]
 [ext_resource type="Script" uid="uid://b4578gmw4f8mp" path="res://data/factory_type.gd" id="1_r8d15"]
 [ext_resource type="Resource" uid="uid://h1u1tmjy8yk3" path="res://data/ammo/basic_bullet.tres" id="2_bgwak"]
 [ext_resource type="Texture2D" uid="uid://dn8knte6wrsjn" path="res://icon.svg" id="3_m2mur"]
+
+[sub_resource type="Resource" id="Resource_6xq36"]
+script = ExtResource("1_bgwak")
+ammo_type = ExtResource("2_bgwak")
+count = 2
+metadata/_custom_type_script = "uid://d11htbgutocjr"
 
 [resource]
 script = ExtResource("1_r8d15")
@@ -13,7 +19,5 @@ display_name = "Freeze lab"
 build_cost = 300
 texture = ExtResource("3_m2mur")
 output_ammo = ExtResource("1_c8phs")
-input_ammo = Dictionary[ExtResource("1_m2mur"), int]({
-ExtResource("2_bgwak"): 1
-})
+ingredients = Array[ExtResource("1_bgwak")]([SubResource("Resource_6xq36")])
 metadata/_custom_type_script = "uid://b4578gmw4f8mp"
