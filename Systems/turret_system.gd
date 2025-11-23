@@ -17,7 +17,18 @@ func update(delta: float) -> void:
             turret.cooldown_timer -= delta
             continue
 
-        if PlayerResources.get_ammo_count() <= 0:
+        var ammo_to_use: AmmoType = null
+        
+        if turret.ammo_filter_id != "":
+            if PlayerResources.has_ammo(turret.ammo_filter_id, 1):
+                ammo_to_use = PlayerResources.ammo_db[turret.ammo_filter_id]
+        else:
+            for ammo_id in PlayerResources.global_ammo:
+                if PlayerResources.has_ammo(ammo_id, 1):
+                    ammo_to_use = PlayerResources.ammo_db[ammo_id]
+                    break
+
+        if ammo_to_use == null:
             continue
 
         if not positions.has(turret_id):
@@ -27,31 +38,42 @@ func update(delta: float) -> void:
         var target_id = _find_target_in_range(turret_pos.position, turret.range_radius)
 
         if target_id != -1:
-            if PlayerResources.spend_ammo(1):
-                _fire_weapon(turret, turret_id, target_id)
+            var ammo_type: AmmoType = null
+            for i in PlayerResources.global_ammo.keys():
+                var at = PlayerResources.global_ammo[i]
+                if at > 0:
+                  ammo_type = i
+                  break
+
+            if PlayerResources.spend_ammo(ammo_type, 1):
+                _fire_weapon(turret, turret_id, target_id, ammo_type)
                 turret.cooldown_timer = 1.0 / turret.fire_rate
 
 func _find_target_in_range(origin: Vector2, radius: float) -> int:
     var nearest_id: int = -1
-    var min_dist_sq: float = radius * radius
+    var min_dist_sq: float = radius * radius 
 
     for enemy_id in enemies:
         if not positions.has(enemy_id):
             continue
 
         var enemy_pos: PositionComponent = positions[enemy_id]
-        var dist_sq = origin.distance_squared_to(enemy_pos.position)
+        
+        var dx = abs(origin.x - enemy_pos.position.x)
+        var dy = abs(origin.y - enemy_pos.position.y)
+        
+        var effective_dist_sq = (dx * dx) + ((dy * 0.2) * (dy * 0.2))
 
-        if dist_sq <= min_dist_sq:
-            min_dist_sq = dist_sq
+        if effective_dist_sq <= min_dist_sq:
+            min_dist_sq = effective_dist_sq
             nearest_id = enemy_id
 
     return nearest_id
 
 
-func _fire_weapon(turret: TurretComponent, turret_id: int, target_id: int):
+func _fire_weapon(turret: TurretComponent, turret_id: int, target_id: int, ammo_type: AmmoType):
     print("Turret %s PEW PEW at Zombie %s! (Ammo left: %s)" %
-        [turret_id, target_id, PlayerResources.get_ammo_count()])
+        [turret_id, target_id, PlayerResources.get_ammo_count(ammo_type)])
 
     # TODO: Spawn Projectile
     turret.target_id_visual = target_id

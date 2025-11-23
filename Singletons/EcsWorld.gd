@@ -37,6 +37,8 @@ func _ready() -> void:
     enemy_spawner_system = EnemySpawnerSystem.new()
     
     Events.upgrade_purchased.connect(_on_upgrade_purchased)
+    
+    spawn_surface_plots()
 
     var desk_id: int = create_entity()
     var desk_pos = PositionComponent.new(Vector2(100, 300))
@@ -285,3 +287,15 @@ func spawn_worker_at_desk(desk_id: int) -> bool:
     desk.current_workers += 1
     
     return true
+
+func spawn_surface_plots():
+    var center_x = PlayerResources.BUNKER_ENTRANCE_X
+    var ground_y = PlayerResources.SURFACE_GROUND_Y
+    
+    for i in range(1, 6):
+        var pos = Vector2(center_x - (i * 100), ground_y)
+        _spawn_plot(pos, 0) # Level 0
+        
+    for i in range(1, 6):
+        var pos = Vector2(center_x + (i * 100), ground_y)
+        _spawn_plot(pos, 0) # Level 0

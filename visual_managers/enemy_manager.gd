@@ -37,8 +37,7 @@ func _process(delta: float) -> void:
 
         zombie.position = pos.position
         _update_facing(zombie, pos.position)
-
-        # if velocity.x < 0: sprite.flip_h = true
+        zombie.z_index = int(pos.position.y)
 
     _ids_to_remove.clear()
     for entity_id in enemy_nodes:

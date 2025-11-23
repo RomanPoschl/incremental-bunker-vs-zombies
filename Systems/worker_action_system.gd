@@ -25,10 +25,12 @@ func _init():
     var StatePickup = load("res://worker/state_pickup.gd")
     var StateInsert = load("res://worker/state_insert.gd")
     var StateDropoff = load("res://worker/state_dropoff.gd")
+    var StateWarehousePickup = load("res://worker/state_warehouse_pickup.gd")
 
     states[WorkerComponents.WorkerState.PICKING_UP] = StatePickup.new(self)
     states[WorkerComponents.WorkerState.INSERTING] = StateInsert.new(self)
     states[WorkerComponents.WorkerState.DROPPING_OFF] = StateDropoff.new(self)
+    states[WorkerComponents.WorkerState.PICKING_UP_FROM_WAREHOUSE] = StateWarehousePickup.new(self)
 
 func update(delta: float):
     for worker_id in fsms:
@@ -115,6 +117,23 @@ func execute_dropoff_logic(worker_id: int):
             
         inventory.stacks.clear()
 
+func execute_warehouse_withdraw_logic(worker_id: int):
+    var needed_resource = _find_needed_resource_on_level(worker_id)
+    if needed_resource == null: return
+
+    var worker: WorkerComponent = workers[worker_id]
+    var inventory: InventoryComponent = inventories[worker_id]
+    
+    var stacks_to_take = worker.stack_capacity - inventory.stacks.size()
+    
+    for i in range(stacks_to_take):
+        if PlayerResources.get_ammo_count(needed_resource.id) <= 0:
+            break
+            
+        if PlayerResources.spend_ammo(needed_resource.id, 50): # 50 = stack size?
+            var new_stack = StackComponent.new(needed_resource, 50)
+            inventory.stacks.append(new_stack)
+
 func worker_has_items(worker_id: int) -> bool:
     if not inventories.has(worker_id): return false
     return not inventories[worker_id].stacks.is_empty()
@@ -150,8 +169,15 @@ func find_worker_desk(worker_id: int) -> int:
     return -1
 
 func find_factory_needing_input(worker_id: int) -> int:
+    if not levels.has(worker_id): 
+        return -1
+
+    var worker_level = levels[worker_id].level
     var first_item_type = inventories[worker_id].stacks[0].ammo_type
     for factory_id in productions:
+        if not levels.has(factory_id) or levels[factory_id].level != worker_level:
+            continue
+            
         var prod: ProductionComponent = productions[factory_id]
         var recipe: FactoryType = prod.recipe_blueprint
         
@@ -222,3 +248,20 @@ func _start_walking(fsm: WorkerFSMComponent, target_id: int, next_state: int):
     fsm.target_entity_id = target_id
     fsm.current_state = WorkerComponents.WorkerState.WALKING
     fsm.next_state_after_walk = next_state
+
+func _find_needed_resource_on_level(worker_id: int) -> AmmoType:
+    var worker_level = levels[worker_id].level
+    
+    for factory_id in productions:
+        if levels[factory_id].level != worker_level: continue
+        
+        var prod = productions[factory_id]
+        var recipe = prod.recipe_blueprint
+        
+        if recipe.ingredients.is_empty(): continue
+        
+        for ingredient in recipe.ingredients:
+            if prod.has_input_space(ingredient.ammo_type.id):
+                if PlayerResources.get_ammo_count(ingredient.ammo_type) > 0:
+                    return ingredient.ammo_type
+    return null

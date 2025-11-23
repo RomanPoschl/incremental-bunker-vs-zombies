@@ -3,11 +3,6 @@ class_name EnemySpawnerSystem
 var spawn_timer: float = 0.0
 var spawn_interval: float = 5.0 # Spawn a new zombie every 5 seconds
 
-# Define spawn area (e.g., far right side of screen)
-var spawn_x: float = 1200.0 # Adjust based on your screen size
-var spawn_y_min: float = 100.0
-var spawn_y_max: float = 150.0
-
 func update(delta: float):
     spawn_timer -= delta
 
@@ -23,10 +18,14 @@ func _spawn_enemy():
     z_comp.current_hp = 50
     z_comp.speed = randf_range(20.0, 40.0) # Give some variety
     z_comp.money_reward = randi_range(5, 15)
+    
+    var side_multiplier = 1 if randf() > 0.5 else -1
+    var row_index = randi() % PlayerResources.ROW_COUNT
+    var spawn_x = PlayerResources.BUNKER_ENTRANCE_X + (side_multiplier * PlayerResources.SPAWN_DISTANCE)
+    var spawn_y = PlayerResources.SURFACE_GROUND_Y + (row_index * PlayerResources.ROW_HEIGHT)
 
-    var z_pos = PositionComponent.new(Vector2(spawn_x, randf_range(spawn_y_min, spawn_y_max)))
-
-    var z_level = LevelComponent.new(1)
+    var z_pos = PositionComponent.new(Vector2(spawn_x, spawn_y))
+    var z_level = LevelComponent.new(0)
 
     EcsWorld.add_component(zombie_id, z_comp)
     EcsWorld.add_component(zombie_id, z_pos)

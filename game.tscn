@@ -95,7 +95,7 @@ grow_vertical = 2
 layout_mode = 2
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(581, 319)
+position = Vector2(577, 27)
 script = ExtResource("13_215e1")
 
 [node name="PlayerInput" type="Node" parent="."]
