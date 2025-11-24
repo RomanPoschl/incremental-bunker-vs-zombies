@@ -11,4 +11,5 @@ base_cost = 50
 cost_multiplier = 1.8
 base_value = 75.0
 value_multiplier = 1.25
+grid_position = Vector2i(0, 1)
 metadata/_custom_type_script = "uid://cb07htxranda6"

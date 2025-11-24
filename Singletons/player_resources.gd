@@ -121,3 +121,17 @@ func purchase_upgrade(upgrade_id: String):
         print("Purchased %s. New value: %s" % [data.name, data.current_value])
     else:
         print("Not enough money for %s" % data.name)
+
+func is_upgrade_available(upgrade_id: String) -> bool:
+    if not upgrade_data.has(upgrade_id): return false
+    var data = upgrade_data[upgrade_id]
+    
+    if data.prerequisite == null:
+        return true
+        
+    var parent_id = data.prerequisite.upgrade_id
+    if upgrade_data.has(parent_id):
+        var parent_data = upgrade_data[parent_id]
+        return parent_data.level > 1
+        
+    return false

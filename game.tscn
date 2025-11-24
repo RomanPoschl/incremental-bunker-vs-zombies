@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://iqdopbd1b6kg"]
+[gd_scene load_steps=20 format=3 uid="uid://iqdopbd1b6kg"]
 
 [ext_resource type="Script" uid="uid://c56fpyntobonv" path="res://visual_managers/worker_manager.gd" id="1_ryrav"]
 [ext_resource type="SpriteFrames" uid="uid://dv6dyuhhw3673" path="res://art/worker_animations.tres" id="2_e2o6t"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://detfoj3egjuwl" path="res://UI/worker_upgrade_panel.gd" id="14_80cx4"]
 [ext_resource type="Script" uid="uid://cu7mhan1xkrlv" path="res://player_input.gd" id="15_7sc4i"]
 [ext_resource type="PackedScene" uid="uid://m84y6mnr8d6" path="res://UI/upgrade_button.tscn" id="15_e8heu"]
+[ext_resource type="PackedScene" uid="uid://cmayogem252gy" path="res://UI/tech_tree.tscn" id="16_rvswv"]
 
 [sub_resource type="Environment" id="Environment_7jktm"]
 background_mode = 1
@@ -93,6 +94,9 @@ grow_vertical = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameUI/BuildMenu"]
 layout_mode = 2
+
+[node name="TechTree" parent="GameUI" instance=ExtResource("16_rvswv")]
+visible = false
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(577, 27)

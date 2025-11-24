@@ -1,6 +1,8 @@
 extends CanvasLayer
 
 @onready var container = $VBoxContainer
+@onready var tech_tree = $TechTree
+
 var money_label: Label
 var ammo_labels: Dictionary = {}
 
@@ -17,7 +19,12 @@ func _ready() -> void:
     
     buy_level_button = Button.new()
     container.add_child(buy_level_button)
-    buy_level_button.pressed.connect(_on_buy_level_pressed)
+    buy_level_button.pressed.connect(func(): PlayerResources.purchase_new_level())
+    
+    var btn = Button.new()
+    btn.text = "TECH TREE"
+    btn.pressed.connect(func(): tech_tree.visible = !tech_tree.visible)
+    container.add_child(btn)
     
     Events.request_build_menu.connect(_on_build_menu_requested)
 
@@ -42,9 +49,6 @@ func _process(delta: float) -> void:
 
         var label = ammo_labels[ammo_type]
         label.text = "%s: %s" % [ammo_type.display_name.capitalize(), amount]
-
-func _on_buy_level_pressed():
-    PlayerResources.purchase_new_level()
 
 func _on_build_menu_requested(plot_id):
     active_plot_id = plot_id
