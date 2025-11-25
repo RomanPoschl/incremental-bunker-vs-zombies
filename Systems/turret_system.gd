@@ -21,11 +21,11 @@ func update(delta: float) -> void:
         
         if turret.ammo_filter_id != "":
             if PlayerResources.has_ammo(turret.ammo_filter_id, 1):
-                ammo_to_use = PlayerResources.ammo_db[turret.ammo_filter_id]
+                ammo_to_use = PlayerResources.global_ammo[turret.ammo_filter_id]
         else:
             for ammo_id in PlayerResources.global_ammo:
                 if PlayerResources.has_ammo(ammo_id, 1):
-                    ammo_to_use = PlayerResources.ammo_db[ammo_id]
+                    ammo_to_use = PlayerResources.global_ammo[ammo_id]
                     break
 
         if ammo_to_use == null:

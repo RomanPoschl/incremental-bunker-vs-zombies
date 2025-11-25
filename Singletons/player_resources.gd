@@ -107,6 +107,11 @@ func purchase_upgrade(upgrade_id: String):
     if not upgrade_data.has(upgrade_id): return
 
     var data: UpgradeData = upgrade_data[upgrade_id]
+    
+    if data.max_level != -1 and data.level >= data.max_level:
+        print("Upgrade %s is already at max level!" % data.name)
+        return
+    
     var cost = get_upgrade_cost(upgrade_id)
     
     if spend_money(cost):
@@ -135,3 +140,7 @@ func is_upgrade_available(upgrade_id: String) -> bool:
         return parent_data.level > 1
         
     return false
+
+func has_ammo(ammo_id: String, amount: int) -> bool:
+    return global_ammo.get(ammo_id, 0) >= amount
+  

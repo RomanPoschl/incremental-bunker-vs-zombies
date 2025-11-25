@@ -13,20 +13,30 @@ func _ready():
     close_button.pressed.connect(func(): visible = false)
     buy_button.pressed.connect(_on_buy_pressed)
 
-func open(upgrade_id: String):
+func open(upgrade_id: String, position: Vector2):
     current_upgrade_id = upgrade_id
     var data = PlayerResources.upgrade_data[upgrade_id]
     var cost = PlayerResources.get_upgrade_cost(upgrade_id)
     
     # Populate UI
-    title_label.text = "%s (Lvl %d)" % [data.name, data.level]
+    if data.max_level > 0:
+        title_label.text = "%s (%d/%d)" % [data.name, data.level, data.max_level]
+    else:
+        title_label.text = "%s (Lvl %d)" % [data.name, data.level]
+
     desc_label.text = data.description
     icon_rect.texture = data.icon
     cost_label.text = "Cost: $%d" % cost
     
     # Button State
     buy_button.text = "Research"
-    if PlayerResources.money < cost:
+    var is_maxed = (data.max_level > 0 and data.level >= data.max_level)
+    
+    if is_maxed:
+        cost_label.text = "MAX LEVEL"
+        buy_button.text = "Completed"
+        buy_button.disabled = true
+    elif PlayerResources.money < cost:
         buy_button.disabled = true
     elif not PlayerResources.is_upgrade_available(upgrade_id):
         buy_button.disabled = true
@@ -34,8 +44,11 @@ func open(upgrade_id: String):
     else:
         buy_button.disabled = false
         
+    if Vector2.ZERO != position:
+        position = position
+        
     visible = true
 
 func _on_buy_pressed():
     PlayerResources.purchase_upgrade(current_upgrade_id)
-    open(current_upgrade_id) # Refresh UI (Level up, new cost)
+    open(current_upgrade_id, Vector2.ZERO) # Refresh UI (Level up, new cost)

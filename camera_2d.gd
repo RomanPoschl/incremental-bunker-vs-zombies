@@ -31,7 +31,7 @@ func _process(delta: float):
         position.x = clamp(position.x, limit_rect.position.x, limit_rect.end.x)
         position.y = clamp(position.y, limit_rect.position.y, limit_rect.end.y)
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventMouseButton:
         if event.button_index == MOUSE_BUTTON_WHEEL_UP:
             _apply_zoom(1.0 + zoom_speed)

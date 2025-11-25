@@ -17,11 +17,14 @@ class_name UpgradeData extends Resource
 @export var value_multiplier: float = 1.0
 @export var value_additive: float = 0.0
 
+@export_group("Limits")
+@export var max_level: int = 5
+
 var is_unlocked: bool = false
 
-var level: int = 1
+var level: int = 0
 var current_value: float = 0.0
 
 func initialize():
-    level = 1
+    level = 0
     current_value = base_value

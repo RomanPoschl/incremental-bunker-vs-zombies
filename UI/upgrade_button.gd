@@ -15,9 +15,16 @@ func _process(delta: float):
     var data = PlayerResources.upgrade_data[upgrade_id]
     var cost = PlayerResources.get_upgrade_cost(upgrade_id)
     
-    label_name.text = "%s (Lvl %s)" % [data.name, data.level]
-    button_buy.text = "Upgrade ($%s)" % cost
-    button_buy.disabled = (PlayerResources.money < cost)
+    var is_maxed = (data.max_level > 0 and data.level >= data.max_level)
+    
+    if is_maxed:
+        label_name.text = "%s (MAX)" % data.name
+        button_buy.text = "Done"
+        button_buy.disabled = true
+    else:
+        label_name.text = "%s (%d/%d)" % [data.name, data.level, data.max_level]
+        button_buy.text = "Upgrade ($%s)" % cost
+        button_buy.disabled = (PlayerResources.money < cost)
        
 func _on_buy_pressed():
     PlayerResources.purchase_upgrade(upgrade_id)
