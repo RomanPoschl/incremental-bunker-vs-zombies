@@ -5,28 +5,26 @@
 [ext_resource type="Texture2D" uid="uid://cfd1g764mb2y8" path="res://art/ammo_box.tres" id="3_7p3b1"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_7p3b1"]
-size = Vector2(25, 25)
+size = Vector2(5, 5)
 
 [node name="Worker" type="Node2D"]
 z_index = 1
 script = ExtResource("1_8vnpx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(6.711, 5)
 sprite_frames = ExtResource("1_26yh5")
 animation = &"walk"
 
 [node name="AmmoBox" type="Sprite2D" parent="."]
 visible = false
-position = Vector2(21, 4)
-scale = Vector2(2, 2)
+position = Vector2(7, 0)
 texture = ExtResource("3_7p3b1")
 
 [node name="ActionProgressBar" type="TextureProgressBar" parent="."]
 visible = false
-offset_left = -13.0
-offset_top = -84.0
-offset_right = 12.0
-offset_bottom = -59.0
+offset_left = -2.0
+offset_top = -24.0
+offset_right = 23.0
+offset_bottom = 1.0
 fill_mode = 4
 texture_progress = SubResource("PlaceholderTexture2D_7p3b1")

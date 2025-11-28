@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b505astg7hers"]
+
+[ext_resource type="Texture2D" uid="uid://btc4d6j5rx4l4" path="res://art/bunker_entrance.tres" id="1_bl7lo"]
+
+[node name="BunkerEntrance" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_bl7lo")

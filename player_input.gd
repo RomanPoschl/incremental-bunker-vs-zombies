@@ -3,7 +3,7 @@ extends Node
 var factory_cost: int = 100
 var plot_size: Vector2 = Vector2(32, 32)
 var desk_size: Vector2 = Vector2(32, 32)
-var factory_size: Vector2 = Vector2(32, 32)
+var factory_size: Vector2 = Vector2(64, 64)
 var half_plot_size: Vector2
 var half_desk_size: Vector2
 var half_factory_size: Vector2

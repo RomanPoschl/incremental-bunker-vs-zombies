@@ -4,8 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://w3256q08yinm" path="res://art/empty_plot.tres" id="2_6s68b"]
 
 [node name="EmptyPlot" type="Node2D"]
+position = Vector2(0, -6)
+scale = Vector2(1, 0.75)
 script = ExtResource("1_mp6go")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(3, 3)
 texture = ExtResource("2_6s68b")

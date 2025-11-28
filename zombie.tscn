@@ -18,5 +18,4 @@ animations = [{
 script = ExtResource("1_uiaus")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(5, 5)
 sprite_frames = SubResource("SpriteFrames_roy8y")

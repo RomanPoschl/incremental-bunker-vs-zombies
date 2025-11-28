@@ -111,7 +111,7 @@ func execute_dropoff_logic(worker_id: int):
         var inventory: InventoryComponent = inventories[worker_id]
         
         for stack in inventory.stacks:
-            PlayerResources.deposit_ammo(stack.ammo_type, stack.amount)
+            PlayerResources.deposit_ammo(stack.ammo_type.id, stack.amount)
             # Optional: Create floating text here
             # Events.ammo_delivered.emit(stack.amount) 
             

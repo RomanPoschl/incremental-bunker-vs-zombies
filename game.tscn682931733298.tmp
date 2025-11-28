@@ -1,0 +1,127 @@
+[gd_scene load_steps=24 format=3 uid="uid://iqdopbd1b6kg"]
+
+[ext_resource type="Script" uid="uid://c56fpyntobonv" path="res://visual_managers/worker_manager.gd" id="1_ryrav"]
+[ext_resource type="SpriteFrames" uid="uid://dv6dyuhhw3673" path="res://art/worker_animations.tres" id="2_e2o6t"]
+[ext_resource type="PackedScene" uid="uid://chirbx5nkw5cq" path="res://worker.tscn" id="2_feb5d"]
+[ext_resource type="Script" uid="uid://dy20dycpyunda" path="res://visual_managers/enemy_manager.gd" id="4_7jktm"]
+[ext_resource type="Script" uid="uid://dvuf65q1vtsoc" path="res://UI/game_ui.gd" id="4_fc0e3"]
+[ext_resource type="PackedScene" uid="uid://bcbf8c1oh4s46" path="res://zombie.tscn" id="5_ryrav"]
+[ext_resource type="Script" uid="uid://bphy5j8c74e5o" path="res://visual_managers/turret_manager.gd" id="6_eow3j"]
+[ext_resource type="PackedScene" uid="uid://ds7fartreeuwy" path="res://turret.tscn" id="7_j5wjh"]
+[ext_resource type="Script" uid="uid://c4vbcpk1dk02u" path="res://visual_managers/structure_manager.gd" id="8_vef74"]
+[ext_resource type="PackedScene" uid="uid://ck2oxj3cknfuu" path="res://factory.tscn" id="9_iotsf"]
+[ext_resource type="PackedScene" uid="uid://cmicogg5k3hgd" path="res://elevator.tscn" id="10_lc2xo"]
+[ext_resource type="PackedScene" uid="uid://cdqhttnb60hc3" path="res://desk.tscn" id="11_215e1"]
+[ext_resource type="PackedScene" uid="uid://b13bpelnbbrk0" path="res://empty_plot.tscn" id="12_lc2xo"]
+[ext_resource type="Script" uid="uid://b2nalsxaarfnj" path="res://camera_2d.gd" id="13_215e1"]
+[ext_resource type="Texture2D" uid="uid://bswgk8k0i6h82" path="res://art/art.png" id="13_boyg6"]
+[ext_resource type="Script" uid="uid://detfoj3egjuwl" path="res://UI/worker_upgrade_panel.gd" id="14_80cx4"]
+[ext_resource type="Script" uid="uid://b38cqawh2xwp" path="res://visual_managers/terrain_manager.gd" id="14_e36ub"]
+[ext_resource type="Script" uid="uid://cu7mhan1xkrlv" path="res://player_input.gd" id="15_7sc4i"]
+[ext_resource type="PackedScene" uid="uid://m84y6mnr8d6" path="res://UI/upgrade_button.tscn" id="15_e8heu"]
+[ext_resource type="PackedScene" uid="uid://cmayogem252gy" path="res://UI/tech_tree.tscn" id="16_rvswv"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e36ub"]
+texture = ExtResource("13_boyg6")
+texture_region_size = Vector2i(32, 32)
+0:11/0 = 0
+0:12/next_alternative_id = 2
+0:12/0 = 0
+0:12/1 = 1
+0:12/1/flip_h = true
+0:13/0 = 0
+0:14/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_hb5m1"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_e36ub")
+
+[sub_resource type="Environment" id="Environment_7jktm"]
+background_mode = 1
+
+[node name="Game" type="Node2D"]
+
+[node name="VisualManagers" type="Node" parent="."]
+
+[node name="WorkerManager" type="Node" parent="VisualManagers"]
+script = ExtResource("1_ryrav")
+worker_scene = ExtResource("2_feb5d")
+worker_sprite_frames = ExtResource("2_e2o6t")
+
+[node name="EnemyManager" type="Node" parent="VisualManagers"]
+script = ExtResource("4_7jktm")
+enemy_scene = ExtResource("5_ryrav")
+
+[node name="TurretManager" type="Node" parent="VisualManagers"]
+script = ExtResource("6_eow3j")
+turret_scene = ExtResource("7_j5wjh")
+
+[node name="StructureManager" type="Node" parent="VisualManagers"]
+script = ExtResource("8_vef74")
+factory_texture = ExtResource("9_iotsf")
+elevator_texture = ExtResource("10_lc2xo")
+desk_texture = ExtResource("11_215e1")
+plot_scene = ExtResource("12_lc2xo")
+
+[node name="TerrainManager" type="TileMapLayer" parent="VisualManagers"]
+z_index = -100
+tile_set = SubResource("TileSet_hb5m1")
+script = ExtResource("14_e36ub")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7jktm")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("13_215e1")
+
+[node name="GameUI" type="CanvasLayer" parent="."]
+script = ExtResource("4_fc0e3")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameUI"]
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="WorkerUpgradePanel" type="PanelContainer" parent="GameUI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("14_80cx4")
+upgrade_btn_scene = ExtResource("15_e8heu")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameUI/WorkerUpgradePanel"]
+layout_mode = 2
+
+[node name="BuildMenu" type="PanelContainer" parent="GameUI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameUI/BuildMenu"]
+layout_mode = 2
+
+[node name="TechTree" parent="GameUI" instance=ExtResource("16_rvswv")]
+visible = false
+
+[node name="PlayerInput" type="Node" parent="."]
+script = ExtResource("15_7sc4i")

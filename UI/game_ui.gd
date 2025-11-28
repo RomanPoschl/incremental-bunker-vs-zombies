@@ -38,17 +38,20 @@ func _process(delta: float) -> void:
         
     var bank = PlayerResources.global_ammo
 
-    for ammo_type in bank:
-        var amount = bank[ammo_type]
+    for ammo_id in bank:
+        var amount = bank[ammo_id]
+        var ammo_name = "Unknown"
+        if PlayerResources.ammo_db.has(ammo_id):
+            ammo_name = PlayerResources.ammo_db[ammo_id].display_name
 
-        if not ammo_labels.has(ammo_type):
+        if not ammo_labels.has(ammo_id):
             var label = Label.new()
             label.mouse_filter = Control.MOUSE_FILTER_IGNORE
             container.add_child(label)
-            ammo_labels[ammo_type] = label
+            ammo_labels[ammo_id] = label
 
-        var label = ammo_labels[ammo_type]
-        label.text = "%s: %s" % [ammo_type.display_name.capitalize(), amount]
+        var label = ammo_labels[ammo_id]
+        label.text = "%s: %s" % [ammo_name.capitalize(), amount]
 
 func _on_build_menu_requested(plot_id):
     active_plot_id = plot_id

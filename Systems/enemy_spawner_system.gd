@@ -22,7 +22,7 @@ func _spawn_enemy():
     var side_multiplier = 1 if randf() > 0.5 else -1
     var row_index = randi() % PlayerResources.ROW_COUNT
     var spawn_x = PlayerResources.BUNKER_ENTRANCE_X + (side_multiplier * PlayerResources.SPAWN_DISTANCE)
-    var spawn_y = PlayerResources.SURFACE_GROUND_Y + (row_index * PlayerResources.ROW_HEIGHT)
+    var spawn_y = PlayerResources.SURFACE_GROUND_Y - (row_index * PlayerResources.ROW_HEIGHT)
 
     var z_pos = PositionComponent.new(Vector2(spawn_x, spawn_y))
     var z_level = LevelComponent.new(0)

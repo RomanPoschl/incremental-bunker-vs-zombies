@@ -99,7 +99,7 @@ func _find_supply_job(worker_id: int) -> Dictionary:
             var needed_id = ingredient.ammo_type.id
             
             if prod.has_input_space(needed_id):
-                if PlayerResources.get_ammo_count(ingredient.ammo_type) > 0: # Ideally check specific ammo type count
+                if PlayerResources.get_ammo_count(needed_id) > 0: # Ideally check specific ammo type count
                      return { "factory_needs_supply": true, "resource_id": needed_id }
                     
     return { "factory_needs_supply": false, "resource_id": "" }

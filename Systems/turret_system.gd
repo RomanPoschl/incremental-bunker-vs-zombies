@@ -17,18 +17,22 @@ func update(delta: float) -> void:
             turret.cooldown_timer -= delta
             continue
 
-        var ammo_to_use: AmmoType = null
+        var ammo_res: AmmoType = null
         
         if turret.ammo_filter_id != "":
+            # A. STRICT MODE
             if PlayerResources.has_ammo(turret.ammo_filter_id, 1):
-                ammo_to_use = PlayerResources.global_ammo[turret.ammo_filter_id]
+                ammo_res = PlayerResources.ammo_db[turret.ammo_filter_id]
         else:
+            # B. ANY MODE
+            # 'global_ammo' keys are now Strings!
             for ammo_id in PlayerResources.global_ammo:
                 if PlayerResources.has_ammo(ammo_id, 1):
-                    ammo_to_use = PlayerResources.global_ammo[ammo_id]
+                    # Look up the Resource using the ID
+                    ammo_res = PlayerResources.ammo_db[ammo_id]
                     break
 
-        if ammo_to_use == null:
+        if ammo_res == null:
             continue
 
         if not positions.has(turret_id):
@@ -38,15 +42,8 @@ func update(delta: float) -> void:
         var target_id = _find_target_in_range(turret_pos.position, turret.range_radius)
 
         if target_id != -1:
-            var ammo_type: AmmoType = null
-            for i in PlayerResources.global_ammo.keys():
-                var at = PlayerResources.global_ammo[i]
-                if at > 0:
-                  ammo_type = i
-                  break
-
-            if PlayerResources.spend_ammo(ammo_type, 1):
-                _fire_weapon(turret, turret_id, target_id, ammo_type)
+            if PlayerResources.spend_ammo(ammo_res.id, 1):
+                _fire_weapon(turret, turret_id, target_id, ammo_res)
                 turret.cooldown_timer = 1.0 / turret.fire_rate
 
 func _find_target_in_range(origin: Vector2, radius: float) -> int:
@@ -73,7 +70,7 @@ func _find_target_in_range(origin: Vector2, radius: float) -> int:
 
 func _fire_weapon(turret: TurretComponent, turret_id: int, target_id: int, ammo_type: AmmoType):
     print("Turret %s PEW PEW at Zombie %s! (Ammo left: %s)" %
-        [turret_id, target_id, PlayerResources.get_ammo_count(ammo_type)])
+        [turret_id, target_id, PlayerResources.get_ammo_count(ammo_type.id)])
 
     # TODO: Spawn Projectile
     turret.target_id_visual = target_id

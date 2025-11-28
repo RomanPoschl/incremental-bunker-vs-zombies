@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://ds7fartreeuwy"]
+[gd_scene load_steps=5 format=3 uid="uid://ds7fartreeuwy"]
 
 [ext_resource type="Script" uid="uid://bd6xb8yf4w3mx" path="res://turret.gd" id="1_tjdg3"]
 [ext_resource type="Texture2D" uid="uid://cca522l5wl37r" path="res://art/turret.tres" id="2_tjdg3"]
+[ext_resource type="Texture2D" uid="uid://c5cng1euvymb6" path="res://art/turret_barrel.tres" id="3_c5apd"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_tjdg3"]
 animations = [{
@@ -18,5 +19,8 @@ animations = [{
 script = ExtResource("1_tjdg3")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(5, 5)
 sprite_frames = SubResource("SpriteFrames_tjdg3")
+
+[node name="Barrel" type="Sprite2D" parent="."]
+position = Vector2(-1, 2)
+texture = ExtResource("3_c5apd")

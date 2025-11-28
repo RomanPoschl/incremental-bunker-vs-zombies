@@ -16,17 +16,17 @@ var money: int = 10000
 
 var global_ammo: Dictionary = {}
 
-const SURFACE_GROUND_Y: float = 0.0
-const BUNKER_ENTRANCE_X: float = PLOT_START_X + (5.0 * PLOT_SPACING)
+const SURFACE_GROUND_Y: float = 0
+const BUNKER_ENTRANCE_X: float = 0
 
-const ROW_HEIGHT: float = 20.0  # Vertical distance between lanes
+const ROW_HEIGHT: float = 32.0  # Vertical distance between lanes
 const ROW_COUNT: int = 5        # How many lanes deep
-const SPAWN_DISTANCE: float = 900.0 # How far left/right zombies spawn
+const SPAWN_DISTANCE: float = 500.0 # How far left/right zombies spawn
 
-const LEVEL_BASE_Y: float = 400.0
-const LEVEL_HEIGHT: float = 200.0
-const PLOT_START_X: float = 200.0
-const PLOT_SPACING: float = 100.0
+const LEVEL_BASE_Y: float = 320.0
+const LEVEL_HEIGHT: float = 96.0
+const PLOT_START_X: float = -(5.0 * PLOT_SPACING)
+const PLOT_SPACING: float = 96.0
 
 var current_max_level: int = -1
 var next_level_cost: int = 500
@@ -59,19 +59,19 @@ func spend_money(amount: int) -> bool:
         return true
     return false
 
-func deposit_ammo(ammo_type: AmmoType, amount: int):
+func deposit_ammo(ammo_type: String, amount: int):
     if not global_ammo.has(ammo_type):
         global_ammo[ammo_type] = 0
     global_ammo[ammo_type] += amount
 
-func spend_ammo(ammo_type: AmmoType, amount: int) -> bool:
+func spend_ammo(ammo_type: String, amount: int) -> bool:
     if global_ammo.has(ammo_type) and global_ammo[ammo_type] >= amount:
         global_ammo[ammo_type] -= amount
         return true
 
     return false
 
-func get_ammo_count(ammo_type: AmmoType) -> int:
+func get_ammo_count(ammo_type: String) -> int:
     if global_ammo.has(ammo_type):
         return global_ammo[ammo_type]
     return 0
