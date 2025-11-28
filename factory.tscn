@@ -18,4 +18,6 @@ animations = [{
 script = ExtResource("1_oq3xt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-46, -64)
 sprite_frames = SubResource("SpriteFrames_fjy48")
+centered = false

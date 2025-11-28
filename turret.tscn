@@ -19,8 +19,11 @@ animations = [{
 script = ExtResource("1_tjdg3")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-16, -32)
 sprite_frames = SubResource("SpriteFrames_tjdg3")
+centered = false
 
 [node name="Barrel" type="Sprite2D" parent="."]
-position = Vector2(-1, 2)
+position = Vector2(-17, -30)
 texture = ExtResource("3_c5apd")
+centered = false

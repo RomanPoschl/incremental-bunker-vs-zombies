@@ -202,7 +202,7 @@ func spawn_new_level(level_number: int):
     var warehouse_x = PlayerResources.PLOT_START_X + (5 * PlayerResources.PLOT_SPACING)
     _spawn_warehouse(Vector2(warehouse_x, level_y), level_number)
 
-func _spawn_plot(pos: Vector2, level: int):
+func _spawn_plot(pos: Vector2, level: int) -> int:
     var plot_id: int = create_entity()
 
     var pos_comp = PositionComponent.new(pos)
@@ -210,6 +210,8 @@ func _spawn_plot(pos: Vector2, level: int):
     add_component(plot_id, PlotComponent.new())
     add_component(plot_id, pos_comp)
     add_component(plot_id, level_comp)
+    
+    return plot_id
 
 func _spawn_warehouse(pos: Vector2, level: int):
     var warehouse_id: int = create_entity()
@@ -240,6 +242,8 @@ func build_structure_at_plot(plot_id: int, data: StructureType):
         add_component(plot_id, desk_comp)
         spawn_worker_at_desk(plot_id)
     elif data.category == "turret":
+        var turret_comp = TurretComponent.new()
+        add_component(plot_id, turret_comp)
         pass
     
     Events.factory_builded.emit(plot_id)
@@ -292,12 +296,24 @@ func spawn_surface_plots():
     var center_x = PlayerResources.BUNKER_ENTRANCE_X
     var ground_y = PlayerResources.SURFACE_GROUND_Y
     
+    var turret = load("res://data/structures/turret.tres")
+    
     for x in range(1, 6):
         for y in range(0,5):
             var pos = Vector2(center_x - (x * PlayerResources.PLOT_SPACING), -(ground_y + (y * PlayerResources.ROW_HEIGHT)))
-            _spawn_plot(pos, 0) # Level 0
+            var plot_id = _spawn_plot(pos, 0) # Level 0
+            
+            if x != 1:
+              continue
+            
+            build_structure_at_plot(plot_id, turret)
         
     for x in range(1, 6):
         for y in range(0,5):
             var pos = Vector2(center_x + (x * PlayerResources.PLOT_SPACING), -(ground_y + (y * PlayerResources.ROW_HEIGHT)))
-            _spawn_plot(pos, 0) # Level 0
+            var plot_id = _spawn_plot(pos, 0) # Level 0
+            
+            if x != 1:
+              continue
+            
+            build_structure_at_plot(plot_id, turret)

@@ -18,4 +18,6 @@ animations = [{
 script = ExtResource("1_uiaus")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-4, -18)
 sprite_frames = SubResource("SpriteFrames_roy8y")
+centered = false

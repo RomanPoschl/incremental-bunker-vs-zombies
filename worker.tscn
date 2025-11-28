@@ -12,19 +12,20 @@ z_index = 1
 script = ExtResource("1_8vnpx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-5, -19)
 sprite_frames = ExtResource("1_26yh5")
 animation = &"walk"
+centered = false
 
 [node name="AmmoBox" type="Sprite2D" parent="."]
-visible = false
-position = Vector2(7, 0)
+position = Vector2(-9, -25)
 texture = ExtResource("3_7p3b1")
+centered = false
 
 [node name="ActionProgressBar" type="TextureProgressBar" parent="."]
-visible = false
 offset_left = -2.0
-offset_top = -24.0
+offset_top = -29.0
 offset_right = 23.0
-offset_bottom = 1.0
+offset_bottom = -4.0
 fill_mode = 4
 texture_progress = SubResource("PlaceholderTexture2D_7p3b1")

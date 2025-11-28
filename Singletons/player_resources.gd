@@ -23,7 +23,7 @@ const ROW_HEIGHT: float = 32.0  # Vertical distance between lanes
 const ROW_COUNT: int = 5        # How many lanes deep
 const SPAWN_DISTANCE: float = 500.0 # How far left/right zombies spawn
 
-const LEVEL_BASE_Y: float = 320.0
+const LEVEL_BASE_Y: float = 96.0
 const LEVEL_HEIGHT: float = 96.0
 const PLOT_START_X: float = -(5.0 * PLOT_SPACING)
 const PLOT_SPACING: float = 96.0

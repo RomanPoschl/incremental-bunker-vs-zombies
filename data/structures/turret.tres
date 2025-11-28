@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="StructureType" load_steps=3 format=3 uid="uid://107amfo42td7"]
+
+[ext_resource type="Script" uid="uid://blvgesmfsughs" path="res://data/structure_type.gd" id="1_p2t7x"]
+[ext_resource type="Texture2D" uid="uid://cca522l5wl37r" path="res://art/turret.tres" id="2_u30y3"]
+
+[resource]
+script = ExtResource("1_p2t7x")
+id = "turret"
+texture = ExtResource("2_u30y3")
+category = "turret"
+metadata/_custom_type_script = "uid://blvgesmfsughs"

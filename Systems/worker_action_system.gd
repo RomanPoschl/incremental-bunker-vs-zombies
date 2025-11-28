@@ -262,6 +262,6 @@ func _find_needed_resource_on_level(worker_id: int) -> AmmoType:
         
         for ingredient in recipe.ingredients:
             if prod.has_input_space(ingredient.ammo_type.id):
-                if PlayerResources.get_ammo_count(ingredient.ammo_type) > 0:
+                if PlayerResources.get_ammo_count(ingredient.ammo_type.id) > 0:
                     return ingredient.ammo_type
     return null
