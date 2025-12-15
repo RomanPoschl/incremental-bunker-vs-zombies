@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="UpgradeData" load_steps=3 format=3 uid="uid://c63vdqn6q21j8"]
 
-[ext_resource type="Resource" uid="uid://dv6p1s8ml2qp1" path="res://data/upgrades/worker_walking_speed.tres" id="1_ngyfo"]
+[ext_resource type="Resource" uid="uid://dv6p1s8ml2qp1" path="res://data/upgrades/structures/worker_walking_speed.tres" id="1_ngyfo"]
 [ext_resource type="Script" uid="uid://cb07htxranda6" path="res://data/upgrade_data.gd" id="1_nnio3"]
 
 [resource]

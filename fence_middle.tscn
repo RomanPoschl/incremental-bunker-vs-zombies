@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwsohwybgbnn"]
+
+[ext_resource type="Texture2D" uid="uid://coikowl1x8bg3" path="res://art/fence.tres" id="1_rh7no"]
+[ext_resource type="Script" uid="uid://cp7jnqymbl0yn" path="res://fence_middle.gd" id="2_xan7c"]
+
+[node name="FenceMiddle" type="Sprite2D"]
+texture = ExtResource("1_rh7no")
+script = ExtResource("2_xan7c")

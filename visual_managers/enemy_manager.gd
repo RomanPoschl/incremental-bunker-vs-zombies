@@ -38,6 +38,16 @@ func _process(delta: float) -> void:
         zombie.position = pos.position
         _update_facing(zombie, pos.position)
         zombie.z_index = int(pos.position.y)
+        
+        zombie.z_index = int(pos.position.y)
+        
+        if EcsWorld.levels[entity_id].level == 0:
+            var scale_factor = PlayerResources.get_perspective_scale(pos.position.y)
+            zombie.scale = Vector2(1, 1) * scale_factor
+            zombie.modulate = PlayerResources.get_perspective_modulate(pos.position.y)
+        else:
+            zombie.scale = Vector2(5, 5)
+            zombie.modulate = Color.WHITE
 
     _ids_to_remove.clear()
     for entity_id in enemy_nodes:
@@ -50,15 +60,9 @@ func _process(delta: float) -> void:
         enemy_nodes.erase(entity_id)
 
 func _update_facing(zombie: Zombie, current_pos: Vector2):
-    if zombie.target_entity_id == -1:
-        return
+    var target_x = PlayerResources.BUNKER_ENTRANCE_X
 
-    if not positions.has(zombie.target_entity_id):
-        return
-
-    var target_pos: PositionComponent = positions[zombie.target_entity_id]
-
-    if target_pos.position.x < current_pos.x:
-        zombie.sprite.flip_h = true
-    elif target_pos.position.x > current_pos.x:
+    if target_x < current_pos.x:
+        zombie.sprite.flip_h = true 
+    elif target_x > current_pos.x:
         zombie.sprite.flip_h = false

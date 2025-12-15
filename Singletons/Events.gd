@@ -10,3 +10,5 @@ signal level_purchased(new_camera_y_pos)
 signal upgrade_purchased(upgrade_id, new_value)
 
 signal tech_node_clicked(upgrade_id: String, position: Vector2)
+
+signal bunker_damaged(current_hp: int)

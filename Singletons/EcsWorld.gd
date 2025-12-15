@@ -295,25 +295,12 @@ func spawn_worker_at_desk(desk_id: int) -> bool:
 func spawn_surface_plots():
     var center_x = PlayerResources.BUNKER_ENTRANCE_X
     var ground_y = PlayerResources.SURFACE_GROUND_Y
-    
     var turret = load("res://data/structures/turret.tres")
     
-    for x in range(1, 6):
-        for y in range(0,5):
-            var pos = Vector2(center_x - (x * PlayerResources.PLOT_SPACING), -(ground_y + (y * PlayerResources.ROW_HEIGHT)))
-            var plot_id = _spawn_plot(pos, 0) # Level 0
-            
-            if x != 1:
-              continue
-            
-            build_structure_at_plot(plot_id, turret)
-        
-    for x in range(1, 6):
-        for y in range(0,5):
-            var pos = Vector2(center_x + (x * PlayerResources.PLOT_SPACING), -(ground_y + (y * PlayerResources.ROW_HEIGHT)))
-            var plot_id = _spawn_plot(pos, 0) # Level 0
-            
-            if x != 1:
-              continue
-            
-            build_structure_at_plot(plot_id, turret)
+    var fence_offset = 32.0 
+    var left = _spawn_plot(Vector2(center_x - fence_offset, ground_y), 0)
+    var right = _spawn_plot(Vector2(center_x + fence_offset, ground_y), 0)
+    build_structure_at_plot(left, turret)
+    build_structure_at_plot(right, turret)
+    
+    print("Spawned Bunker Hardpoints at +/- %s" % fence_offset)

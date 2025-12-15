@@ -14,12 +14,15 @@ var structure_db = {}
 
 var money: int = 10000
 
+var bunker_max_health: int = 100
+var bunker_health: int = 100
+
 var global_ammo: Dictionary = {}
 
 const SURFACE_GROUND_Y: float = 0
 const BUNKER_ENTRANCE_X: float = 0
 
-const ROW_HEIGHT: float = 32.0  # Vertical distance between lanes
+const ROW_HEIGHT: float = 5.0  # Vertical distance between lanes
 const ROW_COUNT: int = 5        # How many lanes deep
 const SPAWN_DISTANCE: float = 500.0 # How far left/right zombies spawn
 
@@ -27,6 +30,9 @@ const LEVEL_BASE_Y: float = 96.0
 const LEVEL_HEIGHT: float = 96.0
 const PLOT_START_X: float = -(5.0 * PLOT_SPACING)
 const PLOT_SPACING: float = 96.0
+
+const MIN_SCALE: float = 0.75 # Back row is 75% size
+const MAX_SCALE: float = 1.0  # Front row is 100% size
 
 var current_max_level: int = -1
 var next_level_cost: int = 500
@@ -144,3 +150,20 @@ func is_upgrade_available(upgrade_id: String) -> bool:
 func has_ammo(ammo_id: String, amount: int) -> bool:
     return global_ammo.get(ammo_id, 0) >= amount
   
+func get_perspective_scale(y_pos: float) -> float:
+    var start_y = SURFACE_GROUND_Y
+    var end_y = SURFACE_GROUND_Y - (ROW_COUNT * ROW_HEIGHT)
+    
+    var t = inverse_lerp(start_y, end_y, y_pos)
+    t = clamp(t, 0.0, 1.0)
+    
+    return lerp(MAX_SCALE, MIN_SCALE, t)
+
+func get_perspective_modulate(y_pos: float) -> Color:
+    var start_y = SURFACE_GROUND_Y
+    var end_y = SURFACE_GROUND_Y - (ROW_COUNT * ROW_HEIGHT)
+    var t = inverse_lerp(start_y, end_y, y_pos)
+    
+    # Back rows get slightly darker (Fake Fog)
+    var gray = lerp(1.0, .8, t) 
+    return Color(gray, gray, gray, 1.0)

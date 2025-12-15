@@ -1,8 +1,34 @@
-[gd_scene load_steps=2 format=3 uid="uid://b505astg7hers"]
+[gd_scene load_steps=6 format=3 uid="uid://b505astg7hers"]
 
 [ext_resource type="Texture2D" uid="uid://btc4d6j5rx4l4" path="res://art/bunker_entrance.tres" id="1_bl7lo"]
+[ext_resource type="PackedScene" uid="uid://dwsohwybgbnn" path="res://fence_middle.tscn" id="2_dejdo"]
+[ext_resource type="Texture2D" uid="uid://c0veqlm5o5tqj" path="res://art/fence_start.tres" id="3_iv5dv"]
+[ext_resource type="Script" uid="uid://cp7jnqymbl0yn" path="res://fence_middle.gd" id="4_iv5dv"]
+[ext_resource type="Texture2D" uid="uid://vglrhmx4cxlw" path="res://art/fence_end.tres" id="5_vij0d"]
 
 [node name="BunkerEntrance" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_bl7lo")
+
+[node name="Fence" type="Node2D" parent="."]
+
+[node name="FenceMiddle" parent="Fence" instance=ExtResource("2_dejdo")]
+position = Vector2(-32, 16)
+texture = ExtResource("3_iv5dv")
+
+[node name="FenceMiddle4" type="Sprite2D" parent="Fence"]
+position = Vector2(32, 15)
+texture = ExtResource("3_iv5dv")
+script = ExtResource("4_iv5dv")
+metadata/_custom_type_script = "uid://cp7jnqymbl0yn"
+
+[node name="FenceMiddle2" parent="Fence" instance=ExtResource("2_dejdo")]
+position = Vector2(-32, -15)
+texture = ExtResource("5_vij0d")
+
+[node name="FenceMiddle5" type="Sprite2D" parent="Fence"]
+position = Vector2(32, -16)
+texture = ExtResource("5_vij0d")
+script = ExtResource("4_iv5dv")
+metadata/_custom_type_script = "uid://cp7jnqymbl0yn"

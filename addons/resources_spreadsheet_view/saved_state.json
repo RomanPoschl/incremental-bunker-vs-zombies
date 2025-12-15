@@ -1,0 +1,33 @@
+{
+  "column_properties": {
+    "res://data/upgrades/meta/": {
+      "metadata/_custom_type_script": {
+        "visibility": 0
+      },
+      "resource_local_to_scene": {
+        "visibility": 0
+      },
+      "resource_name": {
+        "visibility": 0
+      }
+    },
+    "res://data/upgrades/structures/": {
+      "metadata/_custom_type_script": {
+        "visibility": 0
+      },
+      "resource_local_to_scene": {
+        "visibility": 0
+      },
+      "resource_name": {
+        "visibility": 0
+      }
+    }
+  },
+  "recent_paths": [
+    "res://data/upgrades/meta/",
+    "res://data/upgrades/structures/"
+  ],
+  "table_functions": {
+
+  }
+}

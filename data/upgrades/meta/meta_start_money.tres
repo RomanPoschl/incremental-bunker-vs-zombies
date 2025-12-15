@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=2 format=3 uid="uid://csv7j1g8miwpj"]
+
+[ext_resource type="Script" uid="uid://cb07htxranda6" path="res://data/upgrade_data.gd" id="1_0jn7d"]
+
+[resource]
+script = ExtResource("1_0jn7d")
+upgrade_id = "meta_start_money"
+name = "Trust fund"
+description = "Start round with {0} more money"
+metadata/_custom_type_script = "uid://cb07htxranda6"

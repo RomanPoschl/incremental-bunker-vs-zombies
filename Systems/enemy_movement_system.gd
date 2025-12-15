@@ -1,5 +1,7 @@
 class_name EnemyMovementSystem
 
+const ATTACK_RANGE: float = 40.0
+
 var enemies: Dictionary
 var positions: Dictionary
 
@@ -17,15 +19,27 @@ func update(delta: float):
 
         var enemy: EnemyComponent = enemies[enemy_id]
         var pos: PositionComponent = positions[enemy_id]
-
-        var direction = 0
-        if pos.position.x < target_x:
-            direction = 1  # Walk Right
-        else:
-            direction = -1 # Walk Left
-
-        pos.position.x += direction * enemy.speed * delta
         
-        if abs(pos.position.x - target_x) < 10.0:
-            print("Zombie reached the bunker! OUCH!")
-            EcsWorld.mark_for_destruction(enemy_id) 
+        var dist_x = abs(pos.position.x - target_x)
+        
+        if dist_x > ATTACK_RANGE:
+            var direction = 1 if pos.position.x < target_x else -1
+            pos.position.x += direction * enemy.speed * delta
+            enemy.current_cooldown = 0.5
+        else:
+            if enemy.current_cooldown > 0:
+                enemy.current_cooldown -= delta
+            else:
+                _perform_attack(enemy)
+                enemy.current_cooldown = enemy.attack_cooldown
+
+func _perform_attack(enemy: EnemyComponent):
+    # Damage the global health
+    PlayerResources.bunker_health -= enemy.damage
+    Events.bunker_damaged.emit(PlayerResources.bunker_health)
+    print("Bunker took damage! HP: %s" % PlayerResources.bunker_health)
+    
+    # Optional: Game Over Check
+    if PlayerResources.bunker_health <= 0:
+        print("GAME OVER! THE ZOMBIES ATE YOUR BRAINS!")
+        # get_tree().reload_current_scene() # Simple restart
