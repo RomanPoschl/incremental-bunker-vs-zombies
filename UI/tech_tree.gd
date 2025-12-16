@@ -34,8 +34,8 @@ func _generate_tree():
     for child in graph_container.get_children():
         child.queue_free()
         
-    for id in PlayerResources.upgrade_data:
-        var data = PlayerResources.upgrade_data[id]
+    for id in PlayerResources.tech_tree_data:
+        var data = PlayerResources.tech_tree_data[id]
         var node = node_scene.instantiate() as Control
         
         var grid_pos = data.grid_position

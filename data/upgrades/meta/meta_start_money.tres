@@ -1,10 +1,19 @@
-[gd_resource type="Resource" script_class="UpgradeData" load_steps=2 format=3 uid="uid://csv7j1g8miwpj"]
+[gd_resource type="Resource" script_class="MetaUpgradeData" load_steps=3 format=3 uid="uid://csv7j1g8miwpj"]
 
-[ext_resource type="Script" uid="uid://cb07htxranda6" path="res://data/upgrade_data.gd" id="1_0jn7d"]
+[ext_resource type="Script" uid="uid://bncnjtn2k8mrq" path="res://data/meta_upgrade_data.gd" id="1_0jn7d"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tfqvu"]
 
 [resource]
 script = ExtResource("1_0jn7d")
+category = "meta_money"
 upgrade_id = "meta_start_money"
 name = "Trust fund"
+icon = SubResource("PlaceholderTexture2D_tfqvu")
 description = "Start round with {0} more money"
+base_cost = 10
+cost_multiplier = 10.0
+base_value = 500.0
+value_multiplier = 0.0
+value_additive = 500.0
 metadata/_custom_type_script = "uid://cb07htxranda6"

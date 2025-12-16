@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bsg4mot17klxp"]
+[gd_scene load_steps=17 format=3 uid="uid://bsg4mot17klxp"]
 
 [ext_resource type="Script" uid="uid://c4kccjg47cdjy" path="res://Singletons/player_resources.gd" id="1_ct01j"]
 [ext_resource type="Script" uid="uid://cb07htxranda6" path="res://data/upgrade_data.gd" id="2_u8534"]
@@ -6,7 +6,9 @@
 [ext_resource type="Resource" uid="uid://c63vdqn6q21j8" path="res://data/upgrades/structures/worker_capacity.tres" id="4_pic8m"]
 [ext_resource type="Resource" uid="uid://dnuku004k0fvs" path="res://data/upgrades/structures/production_speed.tres" id="5_pic8m"]
 [ext_resource type="Resource" uid="uid://drmtqe32cn71l" path="res://data/upgrades/structures/factory_inventory.tres" id="6_0p23n"]
+[ext_resource type="Resource" uid="uid://csv7j1g8miwpj" path="res://data/upgrades/meta/meta_start_money.tres" id="7_1wlbc"]
 [ext_resource type="Script" uid="uid://ciru7q4amrta4" path="res://data/ammo_type.gd" id="7_mfjce"]
+[ext_resource type="Resource" uid="uid://cph0tgo25h677" path="res://data/upgrades/meta/meta_bunker_hp.tres" id="8_bw0kd"]
 [ext_resource type="Resource" uid="uid://h1u1tmjy8yk3" path="res://data/ammo/basic_bullet.tres" id="8_r8gt5"]
 [ext_resource type="Resource" uid="uid://c8ouuea5b2dvt" path="res://data/ammo/freeze_bullet.tres" id="9_4vhns"]
 [ext_resource type="Script" uid="uid://b4578gmw4f8mp" path="res://data/factory_type.gd" id="10_1wlbc"]
@@ -17,7 +19,7 @@
 
 [node name="PlayerResources" type="Node"]
 script = ExtResource("1_ct01j")
-upgrade_definitions = Array[ExtResource("2_u8534")]([ExtResource("3_qck1h"), ExtResource("4_pic8m"), ExtResource("5_pic8m"), ExtResource("6_0p23n")])
+upgrade_definitions = Array[ExtResource("2_u8534")]([ExtResource("3_qck1h"), ExtResource("4_pic8m"), ExtResource("5_pic8m"), ExtResource("6_0p23n"), ExtResource("7_1wlbc"), ExtResource("8_bw0kd")])
 all_ammo_types = Array[ExtResource("7_mfjce")]([ExtResource("8_r8gt5"), ExtResource("9_4vhns")])
 all_factory_types = Array[ExtResource("10_1wlbc")]([ExtResource("11_bw0kd"), ExtResource("12_gsbrc")])
 all_structure_types = Array[ExtResource("13_4vhns")]([ExtResource("14_1wlbc")])

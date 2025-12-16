@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MetaUpgradeData" load_steps=2 format=3 uid="uid://cph0tgo25h677"]
+
+[ext_resource type="Script" uid="uid://bncnjtn2k8mrq" path="res://data/meta_upgrade_data.gd" id="1_ng5as"]
+
+[resource]
+script = ExtResource("1_ng5as")
+upgrade_id = "meta_bunker_hp"
+name = "Reinforced Concrete"
+description = "Increases Bunker Health by +100."
+base_cost = 5
+cost_multiplier = 5.0
+base_value = 100.0
+value_multiplier = 0.0
+value_additive = 100.0
+max_level = 10
+metadata/_custom_type_script = "uid://bncnjtn2k8mrq"
