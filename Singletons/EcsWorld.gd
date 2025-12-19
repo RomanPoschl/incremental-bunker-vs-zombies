@@ -39,45 +39,6 @@ func _ready() -> void:
     Events.upgrade_purchased.connect(_on_upgrade_purchased)
     
     spawn_surface_plots()
-
-    #var desk_id: int = create_entity()
-    #var desk_pos = PositionComponent.new(Vector2(100, 300))
-    #var desk_level = LevelComponent.new(1)
-    #add_component(desk_id, DeskComponent.new())
-    #add_component(desk_id, desk_pos)
-    #add_component(desk_id, desk_level)
-    #print("Spawned Desk (ID: %s)" % desk_id)
-#
-    #var worker_id: int = create_entity()
-    #var worker_comp = WorkerComponent.new(
-      #PlayerResources.upgrade_data["worker_speed"].current_value, 
-      #PlayerResources.upgrade_data["worker_capacity"].current_value, 
-      #desk_id)
-    #var fsm_comp = WorkerFSMComponent.new()
-    #fsm_comp.current_state = WorkerComponents.WorkerState.IDLE
-    #var worker_pos = PositionComponent.new(Vector2(300, 300))
-    #var worker_level = LevelComponent.new(-1)
-    #var inventory = InventoryComponent.new([])
-#
-    #add_component(worker_id, worker_comp)
-    #add_component(worker_id, fsm_comp)
-    #add_component(worker_id, worker_pos)
-    #add_component(worker_id, worker_level)
-    #add_component(worker_id, inventory)
-    #print("Spawned Worker (ID: %s)" % worker_id)
-#
-    #var turret_id = create_entity()
-    #var t_comp = TurretComponent.new()
-    #t_comp.fire_rate = 2.0
-    #t_comp.damage = 5
-#
-    #var t_pos = PositionComponent.new(Vector2(600, 100))
-#
-    #add_component(turret_id, t_comp)
-    #add_component(turret_id, t_pos)
-    #add_component(turret_id, LevelComponent.new(1))
-    #print("Spawned Turret (ID: %s)" % turret_id)
-
     spawn_new_level(-1)
 
 func _process(delta: float) -> void:
@@ -304,3 +265,4 @@ func spawn_surface_plots():
     build_structure_at_plot(right, turret)
     
     print("Spawned Bunker Hardpoints at +/- %s" % fence_offset)
+    

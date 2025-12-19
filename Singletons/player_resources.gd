@@ -256,10 +256,6 @@ func load_game():
                     upgrade.current_value = upgrade.base_value + (upgrade.value_additive * upgrade.level)
                     print("Loaded Meta Upgrade %s at Level %s" % [id, upgrade.level])
 
-func start_new_run():
-    money = get_start_money()
-    bunker_health = get_max_bunker_hp()
-
 func get_start_money() -> int:
     var base = 500 # Default
     if upgrade_data.has("meta_start_money"):
@@ -272,5 +268,17 @@ func get_max_bunker_hp() -> int:
         base += int(upgrade_data["meta_bunker_hp"].current_value)
     return base
     
+func start_new_run():
+    money = get_start_money() 
     
+    ammo_inventory.clear()
+    factory_inventory.clear()
+    structure_inventory.clear()
     
+    for id in upgrade_data:
+        var upgrade = upgrade_data[id]
+        if not (upgrade is MetaUpgradeData):
+            upgrade.level = 0
+            upgrade.current_value = upgrade.base_value 
+    
+    print("Run Reset! Money: %s" % money)
