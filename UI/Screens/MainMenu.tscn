@@ -1,14 +1,17 @@
 [gd_scene format=3 uid="uid://b03an1of6gbsd"]
 
-[node name="MainMenu" type="Control"]
+[ext_resource type="Script" uid="uid://dkgtk6d6nhdfl" path="res://UI/Screens/MainMenu.gd" id="1_8hpm6"]
+
+[node name="MainMenu" type="Control" unique_id=1636889129]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_8hpm6")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=572880348]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,7 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.101960786, 0.101960786, 0.101960786, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1643660412]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,43 +32,45 @@ theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 40
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1706777482]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer" unique_id=361782372]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "FLYING BUNKER vs. ZOMBIES"
 
-[node name="ResearchPointsLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="ResearchPointsLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1714661321]
 layout_mode = 2
 text = "Research points: 0"
 
-[node name="TechTitle" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="TechTitle" type="Label" parent="MarginContainer/VBoxContainer" unique_id=750970703]
 layout_mode = 2
 text = "Tech found:"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer" unique_id=486962632]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer" unique_id=1225894513]
 layout_mode = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="MarginContainer/VBoxContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer/VBoxContainer" unique_id=2051636523]
 layout_mode = 2
 
-[node name="VBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CenterContainer"]
+[node name="VBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/CenterContainer" unique_id=1773867517]
 layout_mode = 2
 
-[node name="ContinueGame" type="Button" parent="MarginContainer/VBoxContainer/CenterContainer/VBoxContainer"]
+[node name="ContinueGame" type="Button" parent="MarginContainer/VBoxContainer/CenterContainer/VBoxContainer" unique_id=252725251]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Land BUNKER"
 
-[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/CenterContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/CenterContainer/VBoxContainer" unique_id=970028203]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 
-[node name="NewGame" type="Button" parent="MarginContainer/VBoxContainer/CenterContainer/VBoxContainer"]
+[node name="NewGame" type="Button" parent="MarginContainer/VBoxContainer/CenterContainer/VBoxContainer" unique_id=1105992176]
+unique_name_in_owner = true
 layout_mode = 2
 text = "New BUNKER"

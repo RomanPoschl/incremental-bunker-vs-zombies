@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bcbf8c1oh4s46"]
+[gd_scene format=3 uid="uid://bcbf8c1oh4s46"]
 
-[ext_resource type="Script" uid="uid://b03bpp6bxdb6e" path="res://zombie.gd" id="1_uiaus"]
+[ext_resource type="Script" uid="uid://82yeh26v21r5" path="res://ZombieVisual.cs" id="1_roy8y"]
 [ext_resource type="Texture2D" uid="uid://dsditej3f5em3" path="res://art/zombie_walk.tres" id="3_jmu02"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_roy8y"]
@@ -14,10 +14,10 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Zombie" type="Node2D"]
-script = ExtResource("1_uiaus")
+[node name="Zombie" type="Node2D" unique_id=20149370]
+script = ExtResource("1_roy8y")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=985706498]
 position = Vector2(-4, -18)
 sprite_frames = SubResource("SpriteFrames_roy8y")
 centered = false

@@ -38,9 +38,9 @@ func _process(delta: float) -> void:
 
         # Perspective Scale
         if EcsWorld.levels[entity_id].level == 0:
-            var scale_factor = PlayerResources.get_perspective_scale(pos.position.y)
+            var scale_factor = LevelManager.get_perspective_scale(pos.position.y)
             turret.scale = Vector2(1, 1) * scale_factor # Or whatever your base scale is
-            turret.modulate = PlayerResources.get_perspective_modulate(pos.position.y)
+            turret.modulate = LevelManager.get_perspective_modulate(pos.position.y)
 
         # Note: We aren't visualizing shooting yet (that's next!)
         var turret_comp: TurretComponent = turrets[entity_id]

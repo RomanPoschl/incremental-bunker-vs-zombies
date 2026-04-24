@@ -266,3 +266,6 @@ func spawn_surface_plots():
     
     print("Spawned Bunker Hardpoints at +/- %s" % fence_offset)
     
+func clear_entities() -> void:
+    for id in range(0, _next_entity_id - 1):
+      destroy_entity_now(id)

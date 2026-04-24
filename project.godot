@@ -21,18 +21,27 @@ resources_spreadsheet_view/fold_docks=true
 resources_spreadsheet_view/resource_cell_label_mode=1
 resources_spreadsheet_view/freeze_first_column=true
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="incremental"
 run/main_scene="uid://b03an1of6gbsd"
-config/features=PackedStringArray("4.5", "GL Compatibility")
+config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Events="*res://Singletons/Events.gd"
+EventsCs="*uid://bbnjglg7jcupj"
 PlayerResources="*res://Singletons/player_resources.tscn"
 EcsWorld="*res://Singletons/EcsWorld.gd"
+UpgradeManager="*res://Singletons/UpgradeManager.gd"
+DatabaseManager="*res://Singletons/DatabaseManager.gd"
+SceneManager="*res://Singletons/SceneManager.tscn"
+LevelManager="*res://Singletons/LevelManager.gd"
 
 [dotnet]
 

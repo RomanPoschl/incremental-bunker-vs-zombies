@@ -42,9 +42,9 @@ func _process(delta: float) -> void:
         zombie.z_index = int(pos.position.y)
         
         if EcsWorld.levels[entity_id].level == 0:
-            var scale_factor = PlayerResources.get_perspective_scale(pos.position.y)
+            var scale_factor = LevelManager.get_perspective_scale(pos.position.y)
             zombie.scale = Vector2(1, 1) * scale_factor
-            zombie.modulate = PlayerResources.get_perspective_modulate(pos.position.y)
+            zombie.modulate = LevelManager.get_perspective_modulate(pos.position.y)
         else:
             zombie.scale = Vector2(5, 5)
             zombie.modulate = Color.WHITE
@@ -63,6 +63,6 @@ func _update_facing(zombie: Zombie, current_pos: Vector2):
     var target_x = PlayerResources.BUNKER_ENTRANCE_X
 
     if target_x < current_pos.x:
-        zombie.sprite.flip_h = true 
+        zombie.sprite.flip_h = true
     elif target_x > current_pos.x:
         zombie.sprite.flip_h = false

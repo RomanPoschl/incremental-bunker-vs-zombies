@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FactoryType" load_steps=7 format=3 uid="uid://bs1ki1r5mev3d"]
+[gd_resource type="Resource" script_class="FactoryType" format=3 uid="uid://bs1ki1r5mev3d"]
 
 [ext_resource type="Script" uid="uid://d11htbgutocjr" path="res://data/ingredient_data.gd" id="1_bgwak"]
 [ext_resource type="Resource" uid="uid://c8ouuea5b2dvt" path="res://data/ammo/freeze_bullet.tres" id="1_c8phs"]
